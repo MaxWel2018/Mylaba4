@@ -55,20 +55,20 @@ public class StudentServiceImplTest {
         reset(studentRepository);
     }
 
-    @Test
-    public void test1() {
-        Student student = Student.builder().withId(1L).build();
-        Student student1 = studentService.register(student);
-        System.out.println(student1);
-    }
+//    @Test
+//    public void test1() {
+//        Student student = Student.builder().withId(1L).build();
+//        Student student1 = studentService.register(student);
+//        System.out.println(student1);
+//    }
 
     @Test
     public void test2() {
-        Student student = Student.builder().withId(1L).build();
-        when(studentRepository.save(any(Student.class))).thenReturn(student);
+//        Student student = Student.builder().withId(1L).build();
+//        when(studentRepository.save(any(Student.class))).thenReturn(student);
 
-        Student student1 = studentService.register(student);
-        assertNotNull(student1);
+//        Student student1 = studentService.register(student);
+//        assertNotNull(student1);
 
     }
 

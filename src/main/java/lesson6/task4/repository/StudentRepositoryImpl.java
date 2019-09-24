@@ -4,11 +4,9 @@ import lesson6.task4.domain.Student;
 
 import java.util.HashMap;
 import java.util.Map;
-
 public class StudentRepositoryImpl implements StudentRepository {
     private static  StudentRepositoryImpl instance;
     private Map<Long, Student> idToStudents = new HashMap<>();
-    private static Long counter = 0L;
 
     public static StudentRepositoryImpl getInstance() {
         if (instance == null) {
@@ -24,7 +22,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     @Override
     public Student save(Student student) {
         //
-        return idToStudents.put(++counter,student);
+        return idToStudents.put(student.getId(),student);
     }
 
     @Override

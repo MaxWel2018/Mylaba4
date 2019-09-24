@@ -39,18 +39,19 @@
     <label for="select">
         <p> Факультет </p>
         <select name="department" id="select" size="2">
-            <c:forEach var="dep" items="${listDepartment}">
-                <option value=${dep.getName()}>${dep.getName()}</option>
+            <c:forEach var="dep" items="${departments}">
+                <option value=${dep.key}>${dep.value}</option>
             </c:forEach>
         </select>
     </label>
-
     <p> Группа </p>
+
+
     <label>
         <select name="group" size="2">
-            <c:forEach items="${listGroup}" var="group">
-                <c:forEach items="${group.value}" var="groupInner">
-                    <option value="${groupInner}">${groupInner}</option>
+            <c:forEach items="${groups}" var="group">
+                <c:forEach items="${group.value}" var="item">
+                    <option value="${item.key}">${item.value}</option>
                 </c:forEach>
             </c:forEach>
         </select>

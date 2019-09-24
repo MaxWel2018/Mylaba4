@@ -5,6 +5,7 @@ import java.util.Objects;
 
 public class Student {
     private final Long id;
+    private static Long idStaic=0L;
     private final String name;
     private final String surname;
     private final LocalDate birthday;
@@ -14,7 +15,7 @@ public class Student {
     private final Group group;
 
     private Student(Builder builder) {
-        this.id = builder.id;
+        this.id =++idStaic;
         this.name = builder.name;
         this.surname = builder.surname;
         this.birthday = builder.birthday;
@@ -25,6 +26,7 @@ public class Student {
     }
 
     public static Builder builder(){
+
         return new Builder();
     }
 
@@ -100,10 +102,7 @@ public class Student {
             return new Student(this);
         }
 
-        public Builder withId(Long id) {
-            this.id = id;
-            return this;
-        }
+
         public Builder withGroup(Group group) {
             this.group = group;
             return this;

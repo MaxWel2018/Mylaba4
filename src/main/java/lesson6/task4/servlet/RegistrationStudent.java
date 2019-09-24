@@ -4,6 +4,8 @@ import lesson6.task4.domain.Address;
 import lesson6.task4.domain.Department;
 import lesson6.task4.domain.Student;
 import lesson6.task4.domain.University;
+import lesson6.task4.repository.DepartmentRepositoryImpl;
+import lesson6.task4.repository.GroupRepositoryImpl;
 import lesson6.task4.repository.StudentRepositoryImpl;
 import lesson6.task4.service.StudentService;
 import lesson6.task4.service.StudentServiceImpl;
@@ -20,17 +22,13 @@ import static java.lang.Integer.parseInt;
 
 @WebServlet("/register")
 public class RegistrationStudent extends HttpServlet {
-    StudentRepositoryImpl studentRepository = StudentRepositoryImpl.getInstance();// TODO Удалить
-    University university = University.getInstance();
-    StudentService studentService = new StudentServiceImpl(studentRepository);
-    StudentRepositoryImpl repository = StudentRepositoryImpl.getInstance();// TODO Удалить
-
+    private DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.getInstance();
+    private GroupRepositoryImpl groupRepository = GroupRepositoryImpl.getInstance();
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("listDepartment", university.getDepartments());
-        req.setAttribute("listGroup", university.getGroupByDepartment());
+      req.setAttribute("departments",departmentRepository.getIdToDepartment());
+      req.setAttribute("groups",groupRepository.getIdToGroup());
         req.getRequestDispatcher("/views/registration.jsp").forward(req, resp);
-
     }
 
     @Override
@@ -41,11 +39,9 @@ public class RegistrationStudent extends HttpServlet {
                         parseInt(req.getParameter("numberApartment"))))
                 .withPhoneNumber(req.getParameter("phone"))
                 .withBirthday(LocalDate.parse(req.getParameter("birthday")))
-                .withDepartment(new Department(Long.parseLong(req.getParameter("id")),req.getParameter("department")))
+                .withDepartment(new Department(Long.parseLong(req.getParameter("department")),
+                        departmentRepository.findById(Long.parseLong(req.getParameter("department"))).getName()))
                 .build();
-        studentService.register(student);
-        Student student2 = repository.findById((long) 1); // TODO Удалить
-        System.out.println(student);  // TODO Удалить
         resp.sendRedirect(String.format("%s%s", req.getContextPath(), "/menu"));
     }
 }

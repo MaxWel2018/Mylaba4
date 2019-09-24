@@ -2,11 +2,12 @@ package lesson6.task4.domain;
 
 public class Department {
     private final Long id;
+    private  static Long idStatic = 0L;
     private final String name;
 
     public Department(Long id, String name) {
-        this.id = id;
         this.name = name;
+        this.id = ++idStatic;
     }
 
     public Long getId() {
@@ -15,9 +16,7 @@ public class Department {
 
     @Override
     public String toString() {
-        return                 "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return name;
     }
 
     public String getName() {
