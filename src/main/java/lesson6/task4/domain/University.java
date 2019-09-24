@@ -24,6 +24,14 @@ public class University {
         groupByDepartment.put(departments.get(1), groupFacultySlytherin);
     }
 
+    public List<Department> getDepartments() {
+        return departments;
+    }
+
+    public Map<Department, List<Group>> getGroupByDepartment() {
+        return groupByDepartment;
+    }
+
     private University() {
     }
 

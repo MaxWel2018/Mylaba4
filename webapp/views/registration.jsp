@@ -29,24 +29,32 @@
            placeholder="Number apartment" autocomplete="off">
 
     <label for="phone">Phone:</label>
-    <input class="inputForm" type="tel" id="phone" name="phone" placeholder="3801234567" pattern="[0-9]{10}" maxlength="10"
-          title="3801234567" required autocomplete="off">
+    <input class="inputForm" type="tel" id="phone" name="phone" placeholder="3801234567" pattern="[0-9]{10}"
+           maxlength="10"
+           title="3801234567" required autocomplete="off">
 
     <label for="birthday">BirthDay:</label>
     <input class="inputForm" type="date" id="birthday" name="birthday" placeholder="birthday" autocomplete="off">
 
-    <label for="department">Department:</label>
-    <c:forEach var="part" items="${Table1}">
-        <tr>
-            <td>${part.name}</td>
-            <td>${part.need}/></td>
-            <td>${part.count}</td>
+    <label for="select">
+        <p> Факультет </p>
+        <select name="department" id="select" size="2">
+            <c:forEach var="dep" items="${listDepartment}">
+                <option value=${dep.getName()}>${dep.getName()}</option>
+            </c:forEach>
+        </select>
+    </label>
 
-        </tr>
-    </c:forEach>
-
-
-    <label for="group">Group:</label>
+    <p> Группа </p>
+    <label>
+        <select name="group" size="2">
+            <c:forEach items="${listGroup}" var="group">
+                <c:forEach items="${group.value}" var="groupInner">
+                    <option value="${groupInner}">${groupInner}</option>
+                </c:forEach>
+            </c:forEach>
+        </select>
+    </label>
 
 
     <input type="submit" align="center" value="Submit"/>

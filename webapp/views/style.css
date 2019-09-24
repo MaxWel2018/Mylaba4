@@ -5,3 +5,13 @@ input{
 .inputForm {
     width: 150px;
 }
+/*{*/
+/*    margin-bottom: 10px;!important;*/
+/*    margin-top: -10px;!important;*/
+/*    display: block;!important;*/
+/*    width: 150px;!important;*/
+/*    height: 50px;!important;*/
+/*}*/
+.abs{
+    position: absolute;
+}

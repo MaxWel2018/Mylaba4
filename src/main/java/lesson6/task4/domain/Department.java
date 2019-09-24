@@ -13,6 +13,13 @@ public class Department {
         return id;
     }
 
+    @Override
+    public String toString() {
+        return                 "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
     public String getName() {
         return name;
     }
