@@ -5,6 +5,9 @@ import lesson6.task4.domain.Department;
 import lesson6.task4.domain.Student;
 import lesson6.task4.repository.DepartmentRepositoryImpl;
 import lesson6.task4.repository.GroupRepositoryImpl;
+import lesson6.task4.repository.StudentRepository;
+import lesson6.task4.repository.StudentRepositoryImpl;
+import lesson6.task4.service.StudentServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,8 +22,10 @@ import static java.lang.Long.parseLong;
 
 @WebServlet("/register")
 public class RegistrationStudent extends HttpServlet {
+    private StudentRepository studentRepository = StudentRepositoryImpl.getInstance();
     private DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.getInstance();
     private GroupRepositoryImpl groupRepository = GroupRepositoryImpl.getInstance();
+    private StudentServiceImpl studentService = new StudentServiceImpl(studentRepository);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,6 +46,7 @@ public class RegistrationStudent extends HttpServlet {
                         departmentRepository.findById(parseLong(req.getParameter("department"))).getName()))
                 .withGroup(groupRepository.findById(parseLong(req.getParameter("group"))))
                 .build();
+        studentService.register(student);
         resp.sendRedirect(String.format("%s%s", req.getContextPath(), "/menu"));
     }
 }

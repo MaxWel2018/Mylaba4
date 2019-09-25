@@ -2,6 +2,8 @@ package lesson6.task4.repository;
 
 import lesson6.task4.domain.Student;
 
+import java.util.List;
+
 //CRUD
 //C - create
 //R - read
@@ -19,4 +21,6 @@ public interface StudentRepository {
 
     //D
     Student deleteById(Long id);
+
+    public List filterByDepartment(String nameFaculty);
 }

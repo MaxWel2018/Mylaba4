@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="/views/style.css">
 </head>
 <body>
-<a  class="button button_reg" href="${pageContext.servletContext.contextPath}/register">Регестрация</a>
+<a  class="button button_reg" href="${pageContext.servletContext.contextPath}/register">Registration</a>
+<a  class="button button_reg" href="${pageContext.servletContext.contextPath}/filter">Filter by Department</a>
 
 </body>
 </html>
