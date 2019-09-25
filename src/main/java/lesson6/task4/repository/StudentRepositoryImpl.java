@@ -5,7 +5,6 @@ import lesson6.task4.domain.Group;
 import lesson6.task4.domain.Student;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
 public class StudentRepositoryImpl implements StudentRepository {
     private static StudentRepositoryImpl instance;
     private Map<Long, Student> idToStudents = new HashMap<>();
-
 
     {
 
@@ -50,24 +48,65 @@ public class StudentRepositoryImpl implements StudentRepository {
         } else return instance;
     }
 
-    List filterByAfterGivenYear(int year) {
+    @Override
+    public List filterByGroup(String nameGroup) {
+        if (idToStudents != null && nameGroup != null) {
+            List<Student> filteredStudents = idToStudents.values().stream()
+                    .filter(x -> x.getGroup().getName().equals(nameGroup))
+                    .collect(Collectors.toList());
+            if (filteredStudents.size() > 0)
+                return filteredStudents;
+            else throw new EntityNotFoundException();
+        } else throw new IllegalArgumentException();
+
+    }
+
+    @Override
+    public List filterByAfterGivenYear(int year) {
         if (idToStudents != null && year >= 0) {
-            List students = idToStudents.values().stream()
+            List filteredStudents = idToStudents.values().stream()
                     .filter(x -> x.getBirthday().getYear() >= year)
                     .collect(Collectors.toList());
-            if (students.size() > 0)
-                return students;
+            if (filteredStudents.size() > 0)
+                return filteredStudents;
             else throw new EntityNotFoundException();
         } else throw new IllegalArgumentException();
     }
 
-    public List filterByDepartment(String nameFaculty) {
-        if (idToStudents != null && nameFaculty != null) {
-            List students = idToStudents.values().stream()
-                    .filter(student -> (student.getDepartment().getName().equals(nameFaculty)))
+    @Override
+    public Map<String, List> filterByAllDepartmentAndAllCourse() {
+        DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.getInstance();
+        Map<Long, Department> idToDepartment = departmentRepository.getIdToDepartment();
+        GroupRepositoryImpl groupRepository = GroupRepositoryImpl.getInstance();
+        Map<Long, List<Group>> idToGroup = groupRepository.getIdToGroup();
+        Map<String, List> filteredStudents = new HashMap<>();
+
+        if (idToStudents != null) {
+            for (Department value : idToDepartment.values()) {
+                List list = filterByDepartment(value.getName());
+                filteredStudents.put("department", list);
+            }
+            if (idToStudents != null) {
+                for (List<Group> value : idToGroup.values()) {
+                    for (Group group : value) {
+                        List list = filterByGroup(group.getName());
+                        filteredStudents.put("group", list);
+                    }
+                }
+            }
+            if (filteredStudents.size() > 0)
+                return filteredStudents;
+            else throw new EntityNotFoundException();
+        } else throw new IllegalArgumentException();
+    }
+
+    public List filterByDepartment(String nameDepartment) {
+        if (idToStudents != null && nameDepartment != null) {
+            List filteredStudents = idToStudents.values().stream()
+                    .filter(student -> (student.getDepartment().getName().equals(nameDepartment)))
                     .collect(Collectors.toList());
-            if (students.size() > 0)
-                return students;
+            if (filteredStudents.size() > 0)
+                return filteredStudents;
             else throw new EntityNotFoundException();
         } else throw new IllegalArgumentException();
     }

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/filter")
 public class FilterStudent extends HttpServlet {
@@ -17,8 +18,9 @@ public class FilterStudent extends HttpServlet {
     private StudentServiceImpl studentService = new StudentServiceImpl(studentRepository);
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List student = studentService.filterByDepartment("Gryffindor");
-        req.setAttribute("filterGroup", student);
+//        List students = studentService.filterByGroup("Group_G2");
+        Map<String, List> nameToResult = studentService.filterByAllDepartmentAndAllCourse();
+        req.setAttribute("filterGroup", nameToResult);
         req.getRequestDispatcher("/views/filter.jsp").forward(req, resp);
     }
 

@@ -3,6 +3,7 @@ package lesson6.task4.repository;
 import lesson6.task4.domain.Student;
 
 import java.util.List;
+import java.util.Map;
 
 //CRUD
 //C - create
@@ -22,5 +23,16 @@ public interface StudentRepository {
     //D
     Student deleteById(Long id);
 
-    public List filterByDepartment(String nameFaculty);
+    public List filterByDepartment(String nameDepartment);
+
+    List filterByGroup(String nameGroup);
+
+    List filterByAfterGivenYear(int year);
+
+    Map<String,List> filterByAllDepartmentAndAllCourse();
+
+
+
+
+
 }

@@ -13,7 +13,7 @@
 </head>
 <body>
 <a  class="button button_reg" href="${pageContext.servletContext.contextPath}/register">Registration</a>
-<a  class="button button_reg" href="${pageContext.servletContext.contextPath}/filter">Filter by Department</a>
+<a  class="button button_reg" href="${pageContext.servletContext.contextPath}/filter">Filter</a>
 
 </body>
 </html>

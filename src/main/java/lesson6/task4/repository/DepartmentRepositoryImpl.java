@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DepartmentRepositoryImpl implements DepartmentRepository {
-    Map<Long, Department> idToDepartment = new HashMap<>();
+    private Map<Long, Department> idToDepartment = new HashMap<>();
     private static DepartmentRepositoryImpl instance;
 
     {
