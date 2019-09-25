@@ -13,26 +13,26 @@ import java.util.List;
 public class ConsoleApplication {
     public static void main(String[] args) {
 
-        StudentRepository studentRepository =  StudentRepositoryImpl.getInstance();
+        StudentRepository studentRepository = StudentRepositoryImpl.getInstance();
         StudentServiceImpl studentService = new StudentServiceImpl(studentRepository);
 
         studentRepository.save(
                 Student.builder()
-                        .withGroup(new Group(1L,"Group_G2"))
-                        .withDepartment(new Department(1L,"Gryffindor"))
+                        .withGroup(new Group(1L, "Group_G2"))
+                        .withDepartment(new Department(1L, "Gryffindor"))
                         .withName("Max")
                         .build()
         );
         studentRepository.save(
                 Student.builder()
-                        .withGroup(new Group(1L,"Group_G3"))
-                        .withDepartment(new Department(1L,"Gryffindor"))
+                        .withGroup(new Group(1L, "Group_G3"))
+                        .withDepartment(new Department(1L, "Gryffindor"))
                         .withName("Den").build()
         );
         studentRepository.save(
                 Student.builder()
-                        .withGroup(new Group(2L,"Group_S2"))
-                        .withDepartment(new Department(1L,"Slytherin"))
+                        .withGroup(new Group(2L, "Group_S2"))
+                        .withDepartment(new Department(1L, "Slytherin"))
                         .withName("Alex")
                         .build()
         );

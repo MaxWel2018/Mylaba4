@@ -2,7 +2,7 @@ package lesson6.task4.domain;
 
 public class Department {
     private final Long id;
-    private  static Long idStatic = 0L;
+    private static Long idStatic = 0L;
     private final String name;
 
     public Department(Long id, String name) {

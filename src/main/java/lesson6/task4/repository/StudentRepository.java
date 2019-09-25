@@ -23,16 +23,13 @@ public interface StudentRepository {
     //D
     Student deleteById(Long id);
 
-    public List filterByDepartment(String nameDepartment);
+    List filterByDepartment(String nameDepartment);
 
     List filterByGroup(String nameGroup);
 
     List filterByAfterGivenYear(int year);
 
-    Map<String,List> filterByAllDepartmentAndAllCourse();
-
-
-
+    Map<String, List> filterByAllDepartmentAndAllCourse();
 
 
 }

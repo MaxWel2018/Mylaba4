@@ -4,6 +4,7 @@ import lesson6.task4.domain.Student;
 
 public interface StudentService {
     Student register(Student student);
+
     void updateData(Student student);
 
 

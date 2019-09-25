@@ -2,7 +2,7 @@ package lesson6.task4.domain;
 
 public class Group {
     private final Long id;
-    private  static Long idStatic = 0L;
+    private static Long idStatic = 0L;
     private final Long idDepartment;
     private final String name;
 
@@ -11,8 +11,6 @@ public class Group {
         this.name = name;
         this.id = ++idStatic;
     }
-
-
 
 
     public Long getId() {
@@ -29,6 +27,6 @@ public class Group {
 
     @Override
     public String toString() {
-        return name ;
+        return name;
     }
 }

@@ -10,15 +10,15 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
     private static DepartmentRepositoryImpl instance;
 
     {
-       Department gryffindor = new Department(1L, "Gryffindor");
-       Department slytherin = new Department(2L, "Slytherin");
-        idToDepartment.put(gryffindor.getId(),gryffindor);
+        Department gryffindor = new Department(1L, "Gryffindor");
+        Department slytherin = new Department(2L, "Slytherin");
+        idToDepartment.put(gryffindor.getId(), gryffindor);
         idToDepartment.put(slytherin.getId(), slytherin);
     }
 
     @Override
     public Department save(Department department) {
-        return idToDepartment.put(department.getId(),department);
+        return idToDepartment.put(department.getId(), department);
     }
 
     @Override

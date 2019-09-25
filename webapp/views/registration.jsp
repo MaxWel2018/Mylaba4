@@ -18,31 +18,31 @@
     <form action="${pageContext.servletContext.contextPath}/register" method="POST">
         <label for="name">Name :</label>
         <input class="inputForm" pattern="[A-Za-zА-Яа-яЁё]{2,20}" type="text" id="name" name="name" placeholder="Name"
-               autocomplete="off">
+               autocomplete="off" required>
 
         <label for="secondName">Second name :</label>
         <input class="inputForm" pattern="[A-Za-zА-Яа-яЁё]{2,20}" type="text" id="secondName" name="secondName"
-               placeholder="Second name" autocomplete="off">
+               placeholder="Second name" autocomplete="off" required>
 
         <label for="nameStreet">Name Street:</label>
         <input class="inputForm" type="text" id="nameStreet" name="nameStreet" placeholder="Name Street"
-               pattern="[A-Za-zА-Яа-яЁё]{2,20}" autocomplete="off">
+               pattern="[A-Za-zА-Яа-яЁё]{2,20}" autocomplete="off" required>
 
         <label for="numberApartment">Number apartment:</label>
         <input class="inputForm" type="number" min="0" max="1000" id="numberApartment" name="numberApartment"
-               placeholder="Number apartment" autocomplete="off">
+               placeholder="Number apartment" autocomplete="off" required>
 
         <label for="phone">Phone:</label>
         <input class="inputForm" type="tel" id="phone" name="phone" placeholder="3801234567" pattern="[0-9]{10}"
                maxlength="10"
-               title="3801234567" required autocomplete="off">
+               title="3801234567" required autocomplete="off" required>
 
         <label for="birthday">BirthDay:</label>
-        <input class="inputForm" type="date" id="birthday" name="birthday" placeholder="birthday" autocomplete="off">
-
+        <input class="inputForm" type="date" id="birthday" name="birthday" placeholder="birthday" min="1900-01-01"
+               max="2019-09-25" autocomplete="off" required>
         <label for="select">
             <p> Department </p>
-            <select name="department" id="select">
+            <select name="department" id="select" required>
                 <c:forEach var="dep" items="${departments}">
                     <option value=${dep.key}>${dep.value}</option>
                 </c:forEach>
@@ -59,7 +59,6 @@
             </select>
         </label>
         <input class="button button_sub" type="submit" align="center" value="Submit"/>
-
     </form>
 </div>
 

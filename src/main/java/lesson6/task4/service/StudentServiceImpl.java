@@ -3,7 +3,6 @@ package lesson6.task4.service;
 import lesson6.task4.domain.Student;
 import lesson6.task4.repository.StudentRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,8 @@ public class StudentServiceImpl implements StudentService {
     public StudentServiceImpl(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
-    void filterByFacultyAndCourse(){
+
+    void filterByFacultyAndCourse() {
 
     }
 

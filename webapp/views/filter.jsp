@@ -10,6 +10,7 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" href="/views/style.css">
     <link rel="stylesheet" href="/views/tableStyle.css">
 </head>
 <body>
@@ -72,6 +73,9 @@
     </c:forEach>
 
 </table>
+
+<a  class="button button_reg" href="${pageContext.servletContext.contextPath}/menu"> Back to menu</a>
+
 
 </body>
 </html>

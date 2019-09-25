@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Student {
     private final Long id;
-    private static Long idStaic=0L;
+    private static Long idStaic = 0L;
     private final String name;
     private final String surname;
     private final LocalDate birthday;
@@ -15,7 +15,7 @@ public class Student {
     private final Group group;
 
     private Student(Builder builder) {
-        this.id =++idStaic;
+        this.id = ++idStaic;
         this.name = builder.name;
         this.surname = builder.surname;
         this.birthday = builder.birthday;
@@ -25,7 +25,7 @@ public class Student {
         this.group = builder.group;
     }
 
-    public static Builder builder(){
+    public static Builder builder() {
 
         return new Builder();
     }
@@ -82,21 +82,33 @@ public class Student {
         return Objects.hash(id, name, surname, birthday, address, department, phoneNumber, group);
     }
 
-    public static class Builder{
-        private  Long id;
-        private  static Long idStatic =0L;
-        private  String name;
-        private  String surname;
-        private  LocalDate birthday;
-        private  Address address;
-        private  Department department;
-        private  String phoneNumber;
-        private  Group group;
+    public static class Builder {
+        private static volatile Builder mInstance;
+        private Long id;
+        private static Long idStatic = 0L;
+        private String name;
+        private String surname;
+        private LocalDate birthday;
+        private Address address;
+        private Department department;
+        private String phoneNumber;
+        private Group group;
 
         private Builder() {
         }
-        
-        public Student build(){
+
+        public static Builder getInstance() {
+            if (mInstance == null) {
+                synchronized (Builder.class) {
+                    if (mInstance == null) {
+                        mInstance = new Builder();
+                    }
+                }
+            }
+            return mInstance;
+        }
+
+        public Student build() {
             idStatic++;
             this.id = idStatic;
             return new Student(this);
@@ -129,12 +141,19 @@ public class Student {
         }
 
         public Builder withDepartment(Department department) {
-            this.department = department;
+            if (department!=null) {
+                this.department = department;
+            }else{
+                this.department = new Department(0L, "" );
+            }
             return this;
         }
 
+
         public Builder withPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
+            if (phoneNumber!=null) {
+                this.phoneNumber = phoneNumber;
+            }else     this.phoneNumber = "";
             return this;
         }
     }
