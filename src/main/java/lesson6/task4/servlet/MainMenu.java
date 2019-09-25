@@ -13,7 +13,7 @@ public class MainMenu extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, ServletException {
-        req.getRequestDispatcher("/views/registration.jsp").forward(req,resp);
+        req.getRequestDispatcher("/views/mainMenu.jsp").forward(req,resp);
 
     }
 }

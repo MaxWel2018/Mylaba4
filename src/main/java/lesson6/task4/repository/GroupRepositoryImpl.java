@@ -29,9 +29,9 @@ public class GroupRepositoryImpl implements GroupRepository {
         Group groupG1 = new Group(1L, "Group_G1");
         Group groupG2 = new Group(1L, "Group_G2");
         Group groupG3 = new Group(1L, "Group_G3");
-        Group groupS1 = new Group(1L, "Group_S1");
-        Group groupS2 = new Group(1L, "Group_S2");
-        Group groupS3 = new Group(1L, "Group_S3");
+        Group groupS1 = new Group(2L, "Group_S1");
+        Group groupS2 = new Group(2L, "Group_S2");
+        Group groupS3 = new Group(2L, "Group_S3");
         updateIndices(groupS1, groupS2, groupS3, groupG1, groupG2, groupG3);
     }
 
