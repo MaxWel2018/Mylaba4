@@ -16,12 +16,10 @@ import java.util.Map;
 
 @WebServlet("/filter")
 public class FilterStudent extends HttpServlet {
-    private StudentRepositoryImpl studentRepository = StudentRepositoryImpl.getInstance();
-    private StudentServiceImpl studentService = new StudentServiceImpl(studentRepository);
-
+    StudentRepositoryImpl studentRepository = StudentRepositoryImpl.STUDENT_REPOSITORY;
+    StudentServiceImpl studentService = new StudentServiceImpl(studentRepository);
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List students = studentService.filterByGroup("Group_G2");
-//        Map<String, List> nameToResult = studentService.filterByAllDepartmentAndAllCourse();
         req.setAttribute("filterGroup", students);
         req.getRequestDispatcher("/views/filter.jsp").forward(req, resp);
     }

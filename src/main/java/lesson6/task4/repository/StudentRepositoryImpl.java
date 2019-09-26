@@ -4,24 +4,16 @@ import lesson6.task4.domain.Department;
 import lesson6.task4.domain.Group;
 import lesson6.task4.domain.Student;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class StudentRepositoryImpl implements Repository<Student> {
-   public static final StudentRepositoryImpl STUDENT_REPOSITORY = new StudentRepositoryImpl();
+    public static final StudentRepositoryImpl STUDENT_REPOSITORY = new StudentRepositoryImpl();
     private static final Map<Long, Student> STUDENTS = new HashMap<>();
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
     private static Map<Long, List<Student>> byDepartmentId = Collections.emptyMap(); // список отсортированых по факультету
     private static Map<String, List<Student>> byName = Collections.emptyMap(); // по группам
-
-    private void updateIndices() {
-        byDepartmentId = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getId));
-        byName = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getName));
-    }
-
-
 
     {
 
@@ -47,10 +39,14 @@ public class StudentRepositoryImpl implements Repository<Student> {
         );
     }
 
+
     private StudentRepositoryImpl() {
     }
 
-
+    private void updateIndices() {
+        byDepartmentId = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getId));
+        byName = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getName));
+    }
 
     public List filterByGroup(String nameGroup) {
         Objects.requireNonNull(nameGroup);
@@ -58,12 +54,11 @@ public class StudentRepositoryImpl implements Repository<Student> {
 
     }
 
-    public Optional<List> filterByAfterGivenYear(int year) {
+    public List filterByAfterGivenYear(int year) {
         Objects.requireNonNull(year);
-            List filteredStudents = STUDENTS.values().stream()
-                    .filter(x -> x.getBirthday().getYear() >= year)
-                    .collect(Collectors.toList());
-                return Optional.of(filteredStudents);
+        return STUDENTS.values().stream()
+                .filter(x -> x.getBirthday().getYear() >= year)
+                .collect(Collectors.toList());
     }
 
     public List filterByDepartment(String nameDepartment) {
@@ -72,7 +67,7 @@ public class StudentRepositoryImpl implements Repository<Student> {
     }
 
     @Override
-    public Student  save(Student student) {
+    public Student save(Student student) {
         Objects.requireNonNull(student);
         Long id = student.getId();
         if (id == null) {

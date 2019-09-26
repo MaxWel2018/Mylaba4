@@ -4,33 +4,24 @@ import lesson6.task4.domain.Student;
 import lesson6.task4.repository.StudentRepositoryImpl;
 
 import java.util.List;
-import java.util.Map;
 
-public class StudentServiceImpl implements StudentService {
+public class StudentServiceImpl implements StudentService,FilterService {
     private final StudentRepositoryImpl studentRepository;
 
     public StudentServiceImpl(StudentRepositoryImpl studentRepository) {
-        this.studentRepository =  studentRepository;
+        this.studentRepository = studentRepository;
     }
 
-    void filterByFacultyAndCourse() {
-
+    public  List filterByGroup(String nameGroup) {
+        return StudentRepositoryImpl.STUDENT_REPOSITORY.filterByGroup(nameGroup);
     }
 
     public List filterByDepartment(String nameDepartment) {
-        return studentRepository.filterByDepartment(nameDepartment);
-    }
-
-    public Map<String, List> filterByAllDepartmentAndAllCourse() {
-        return studentRepository.filterByAllDepartmentAndAllCourse();
-    }
-
-    public List filterByGroup(String nameGroup) {
-        return studentRepository.filterByGroup(nameGroup);
+        return StudentRepositoryImpl.STUDENT_REPOSITORY.filterByGroup(nameDepartment);
     }
 
     public List filterByAfterGivenYear(int year) {
-        return studentRepository.filterByAfterGivenYear(year);
+        return StudentRepositoryImpl.STUDENT_REPOSITORY.filterByAfterGivenYear(year);
     }
 
     @Override

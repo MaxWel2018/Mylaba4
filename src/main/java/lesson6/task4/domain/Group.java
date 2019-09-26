@@ -21,7 +21,6 @@ public class Group {
     public Long getIdDepartment() {
         return idDepartment;
     }
-
     public String getName() {
         return name;
     }

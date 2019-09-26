@@ -2,22 +2,46 @@ package lesson6.task4.repository;
 
 import lesson6.task4.domain.Group;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-public class GroupRepositoryImpl implements  Repository<Group> {
-
+public class GroupRepositoryImpl implements Repository<Group> {
     public static final GroupRepositoryImpl GROUP_REPOSITORY = new GroupRepositoryImpl();
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
-    private  static  final  Map<Long, Group> GROUPS = new HashMap<>(); // список групп
-
+    private static final Map<Long, Group> GROUPS = new HashMap<>(); // список групп
     private static Map<Long, List<Group>> byDepartmentId = Collections.emptyMap(); // список отсортированых по факультету
-
     private static Map<String, List<Group>> byName = Collections.emptyMap(); // по группам
 
+    {
+        save(new Group(1L, "Group_G1"));
+        save(new Group(1L, "Group_G2"));
+        save(new Group(1L, "Group_G3"));
+        save(new Group(2L, "Group_S1"));
+        save(new Group(2L, "Group_S2"));
+        save(new Group(2L, "Group_S3"));
+        updateIndices();
+    }
 
+    private GroupRepositoryImpl() {
+    }
+
+    public static Map<Long, List<Group>> getByDepartmentId() {
+        return byDepartmentId;
+    }
+
+    public static Map<String, List<Group>> getByName() {
+        return byName;
+    }
+
+    public static GroupRepositoryImpl getGroupRepository() {
+        return GROUP_REPOSITORY;
+
+    }
+
+    public static Map<Long, Group> getGROUPS() {
+        return GROUPS;
+    }
 
     @Override
     public Group save(Group group) {
@@ -38,7 +62,7 @@ public class GroupRepositoryImpl implements  Repository<Group> {
     }
 
     @Override
-    public Optional<Group> findById(Long id) {
+    public  Optional<Group> findById(Long id) {
         Objects.requireNonNull(id);
         return Optional.ofNullable(GROUPS.get(id));
     }
@@ -61,27 +85,6 @@ public class GroupRepositoryImpl implements  Repository<Group> {
         Group group = GROUPS.remove(id);
         updateIndices();
         return group;
-    }
-
-    private GroupRepositoryImpl() {
-    }
-
-    {
-        save(new Group(1L, "Group_G1"));
-        save(new Group(1L, "Group_G2"));
-        save(new Group(1L, "Group_G3"));
-        save(new Group(2L, "Group_S1"));
-        save(new Group(2L, "Group_S2"));
-        save(new Group(2L, "Group_S3"));
-        updateIndices();
-    }
-
-    public static Map<Long, List<Group>> getByDepartmentId() {
-        return byDepartmentId;
-    }
-
-    public static Map<String, List<Group>> getByName() {
-        return byName;
     }
 
     private void updateIndices() {

@@ -40,8 +40,11 @@ public class DepartmentRepositoryImpl implements Repository<Department> {
         return Optional.ofNullable(DEPARMENTS.get(id));
     }
 
+    private DepartmentRepositoryImpl() {
+
+    }
     @Override
-    public List<Department> findByDepartmentId(Long id) {
+    public  List<Department> findByDepartmentId(Long id) {
         Objects.requireNonNull(id);
         return byDepartmentId.getOrDefault(id, Collections.emptyList());
     }
@@ -66,7 +69,7 @@ public class DepartmentRepositoryImpl implements Repository<Department> {
         byDepartmentId = DEPARMENTS.values().stream().collect(Collectors.groupingBy(Department::getId));
         byName = DEPARMENTS.values().stream().collect(Collectors.groupingBy(Department::getName));
     }
-    public Map<Long, Department> getIdToDepartment() {
+    public static Map<Long, Department> getIdToDepartment() {
         return DEPARMENTS;
     }
 }

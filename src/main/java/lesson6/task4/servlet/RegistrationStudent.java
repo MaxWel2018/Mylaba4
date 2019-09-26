@@ -1,10 +1,10 @@
 package lesson6.task4.servlet;
 
 import lesson6.task4.domain.Address;
-import lesson6.task4.domain.Department;
 import lesson6.task4.domain.Student;
 import lesson6.task4.repository.DepartmentRepositoryImpl;
 import lesson6.task4.repository.GroupRepositoryImpl;
+import lesson6.task4.repository.Repository;
 import lesson6.task4.repository.StudentRepositoryImpl;
 import lesson6.task4.service.StudentServiceImpl;
 
@@ -17,19 +17,17 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import static java.lang.Integer.parseInt;
-import static java.lang.Long.parseLong;
 
 @WebServlet("/register")
 public class RegistrationStudent extends HttpServlet {
-    private StudentRepositoryImpl studentRepository = StudentRepositoryImpl.getInstance();
-    private DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.getInstance();
-    private GroupRepositoryImpl groupRepository = GroupRepositoryImpl.getInstance();
-    private StudentServiceImpl studentService = new StudentServiceImpl(studentRepository);
+    private DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.DEPARTMENT_REPOSITORY;
+    private GroupRepositoryImpl groupRepository = GroupRepositoryImpl.GROUP_REPOSITORY;
+    private StudentServiceImpl studentService = new StudentServiceImpl(StudentRepositoryImpl.STUDENT_REPOSITORY);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("departments", departmentRepository.getIdToDepartment());
-        req.setAttribute("groups", groupRepository.getIdToGroup());
+        req.setAttribute("departments", DepartmentRepositoryImpl.getIdToDepartment());
+        req.setAttribute("groups", GroupRepositoryImpl.getGROUPS());
         req.getRequestDispatcher("/views/registration.jsp").forward(req, resp);
     }
 
@@ -41,9 +39,8 @@ public class RegistrationStudent extends HttpServlet {
                         parseInt(req.getParameter("numberApartment"))))
                 .withPhoneNumber(req.getParameter("phone"))
                 .withBirthday(LocalDate.parse(req.getParameter("birthday")))
-                .withDepartment(new Department(parseLong(req.getParameter("department")),
-                        departmentRepository.findById(parseLong(req.getParameter("department"))).getName()))
-                .withGroup(groupRepository.findById(parseLong(req.getParameter("group"))))
+                .withDepartment(departmentRepository.findById(Long.valueOf(req.getParameter("department"))).get())
+                .withGroup(groupRepository.findById(Long.valueOf(req.getParameter("group"))).get())
                 .build();
         studentService.register(student);
         resp.sendRedirect(String.format("%s%s", req.getContextPath(), "/menu"));
