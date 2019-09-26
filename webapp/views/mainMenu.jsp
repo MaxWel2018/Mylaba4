@@ -5,10 +5,11 @@
   Date: 25.09.2019
   Time: 2:48
   To change this template use File | Settings | File Templates.
---%>
+--%><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<html">>
+<html>
 <head>
     <title>Title</title>
     <link rel="stylesheet" href="/views/style.css">
@@ -16,12 +17,11 @@
 <body>
 
 
-
 <a class="button button_reg" href="${pageContext.servletContext.contextPath}/register">
-    <fmt:message key="register"/>
+  Registration
 </a>
 <a class="button button_reg" href="${pageContext.servletContext.contextPath}/filter">
-    <fmt:message key="filter"/>
+    Filter
 </a>
 
 </body>

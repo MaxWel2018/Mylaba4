@@ -5,14 +5,23 @@ import lesson6.task4.domain.Group;
 import lesson6.task4.domain.Student;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class StudentRepositoryImpl implements Repository<Student> {
-    private static StudentRepositoryImpl instance;
-    private Map<Long, Student> idToStudents = new HashMap<>();
+   public static final StudentRepositoryImpl STUDENT_REPOSITORY = new StudentRepositoryImpl();
+    private static final Map<Long, Student> STUDENTS = new HashMap<>();
+    private static final AtomicLong SEQUENCE = new AtomicLong(1);
+    private static Map<Long, List<Student>> byDepartmentId = Collections.emptyMap(); // список отсортированых по факультету
+    private static Map<String, List<Student>> byName = Collections.emptyMap(); // по группам
+
+    private void updateIndices() {
+        byDepartmentId = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getId));
+        byName = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getName));
+    }
+
+
 
     {
 
@@ -41,93 +50,68 @@ public class StudentRepositoryImpl implements Repository<Student> {
     private StudentRepositoryImpl() {
     }
 
-    public static StudentRepositoryImpl getInstance() {
-        if (instance == null) {
-            instance = new StudentRepositoryImpl();
-            return instance;
-        } else return instance;
-    }
+
 
     public List filterByGroup(String nameGroup) {
-        if (idToStudents != null && nameGroup != null) {
-            List<Student> filteredStudents = idToStudents.values().stream()
-                    .filter(x -> x.getGroup().getName().equals(nameGroup))
-                    .collect(Collectors.toList());
-            if (filteredStudents.size() > 0)
-                return filteredStudents;
-            else throw new EntityNotFoundException();
-        } else throw new IllegalArgumentException();
+        Objects.requireNonNull(nameGroup);
+        return GroupRepositoryImpl.GROUP_REPOSITORY.findByName(nameGroup);
 
     }
 
-    public List filterByAfterGivenYear(int year) {
-        if (idToStudents != null && year >= 0) {
-            List filteredStudents = idToStudents.values().stream()
+    public Optional<List> filterByAfterGivenYear(int year) {
+        Objects.requireNonNull(year);
+            List filteredStudents = STUDENTS.values().stream()
                     .filter(x -> x.getBirthday().getYear() >= year)
                     .collect(Collectors.toList());
-            if (filteredStudents.size() > 0)
-                return filteredStudents;
-            else throw new EntityNotFoundException();
-        } else throw new IllegalArgumentException();
-    }
-
-    public Map<String, List> filterByAllDepartmentAndAllCourse() {
-        DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.getInstance();
-        Map<Long, Department> idToDepartment = departmentRepository.getIdToDepartment();
-        GroupRepositoryImpl groupRepository = GroupRepositoryImpl.getInstance();
-        Map<Long, List<Group>> idToGroup = groupRepository.getIdToGroup();
-        Map<String, List> filteredStudents = new HashMap<>();
-
-        if (idToStudents != null) {
-            for (Department value : idToDepartment.values()) {
-                List list = filterByDepartment(value.getName());
-                filteredStudents.put("department", list);
-            }
-            if (idToStudents != null) {
-                for (List<Group> value : idToGroup.values()) {
-                    for (Group group : value) {
-                        List list = filterByGroup(group.getName());
-                        filteredStudents.put("group", list);
-                    }
-                }
-            }
-            if (filteredStudents.size() > 0)
-                return filteredStudents;
-            else throw new EntityNotFoundException();
-        } else throw new IllegalArgumentException();
+                return Optional.of(filteredStudents);
     }
 
     public List filterByDepartment(String nameDepartment) {
-        if (idToStudents != null && nameDepartment != null) {
-            List filteredStudents = idToStudents.values().stream()
-                    .filter(student -> (student.getDepartment().getName().equals(nameDepartment)))
-                    .collect(Collectors.toList());
-            if (filteredStudents.size() > 0)
-                return filteredStudents;
-            else throw new EntityNotFoundException();
-        } else throw new IllegalArgumentException();
+        Objects.requireNonNull(nameDepartment);
+        return DepartmentRepositoryImpl.DEPARTMENT_REPOSITORY.findByName(nameDepartment);
     }
 
     @Override
-    public Student save(Student student) {
-        //
-        return idToStudents.put(student.getId(), student);
+    public Student  save(Student student) {
+        Objects.requireNonNull(student);
+        Long id = student.getId();
+        if (id == null) {
+            id = SEQUENCE.getAndIncrement();
+            student.setId(id);
+        }
+        STUDENTS.put(id, student);
+        updateIndices();
+        return STUDENTS.get(id);
     }
 
     @Override
-    public Student findById(Long id) {
-        return idToStudents.get(id);
+    public Optional<Student> findById(Long id) {
+        Objects.requireNonNull(id);
+        return Optional.ofNullable(STUDENTS.get(id));
+    }
+
+    @Override
+    public List<Student> findByDepartmentId(Long id) {
+        Objects.requireNonNull(id);
+        return byDepartmentId.getOrDefault(id, Collections.emptyList());
+    }
+
+    @Override
+    public List<Student> findByName(String name) {
+        Objects.requireNonNull(name);
+        return byName.getOrDefault(name, Collections.emptyList());
     }
 
     @Override
     public void update(Student student) {
-
-        this.idToStudents.replace(student.getId(), student);
-//
+        save(student);
     }
 
     @Override
     public Student deleteById(Long id) {
-        return idToStudents.remove(id);
+        Objects.requireNonNull(id);
+        Student student = STUDENTS.remove(id);
+        updateIndices();
+        return student;
     }
 }

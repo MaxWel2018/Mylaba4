@@ -2,16 +2,22 @@ package lesson6.task4.repository;
 
 import lesson6.task4.domain.Group;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface Repository<T> {
     T save(T student);
 
-    //R
-    T findById(Long id);
-
-    //U
     void update(T student);
 
-    //D
+    Optional<T> findById(Long id);
+
+
+    List<T> findByDepartmentId(Long id);
+
+    List<T> findByName(String name);
+
     T deleteById(Long id);
+
 }
 

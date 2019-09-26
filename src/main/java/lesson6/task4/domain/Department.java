@@ -10,6 +10,10 @@ public class Department {
         this.id = ++idStatic;
     }
 
+    public static Long getIdStatic() {
+        return idStatic;
+    }
+
     public Long getId() {
         return id;
     }

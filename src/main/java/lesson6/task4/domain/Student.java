@@ -4,8 +4,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Student {
-    private final Long id;
-    private static Long idStaic = 0L;
+    private  Long id;
     private final String name;
     private final String surname;
     private final LocalDate birthday;
@@ -14,8 +13,10 @@ public class Student {
     private final String phoneNumber;
     private final Group group;
 
-    private Student(Builder builder) {
-        this.id = ++idStaic;
+
+
+    private Student(Long id, Builder builder) {
+        this.id = id;
         this.name = builder.name;
         this.surname = builder.surname;
         this.birthday = builder.birthday;
@@ -30,6 +31,9 @@ public class Student {
         return new Builder();
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
     public Long getId() {
         return id;
     }
@@ -62,6 +66,7 @@ public class Student {
         return phoneNumber;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -85,7 +90,6 @@ public class Student {
     public static class Builder {
         private static volatile Builder mInstance;
         private Long id;
-        private static Long idStatic = 0L;
         private String name;
         private String surname;
         private LocalDate birthday;
@@ -109,9 +113,7 @@ public class Student {
         }
 
         public Student build() {
-            idStatic++;
-            this.id = idStatic;
-            return new Student(this);
+            return new Student(id, this);
         }
 
 

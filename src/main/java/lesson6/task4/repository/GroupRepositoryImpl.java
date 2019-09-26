@@ -3,92 +3,89 @@ package lesson6.task4.repository;
 import lesson6.task4.domain.Group;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 public class GroupRepositoryImpl implements  Repository<Group> {
-    private static GroupRepositoryImpl instance;
-    private Map<Long, List<Group>> idToGroup = new HashMap<>();
 
-    private void updateIndices(List<Group> groups) {
-        for (Group group : groups) {
-            idToGroup.computeIfAbsent(group.getIdDepartment(), id -> new ArrayList<>()).add(group);
-        }
-    }
+    public static final GroupRepositoryImpl GROUP_REPOSITORY = new GroupRepositoryImpl();
+    private static final AtomicLong SEQUENCE = new AtomicLong(1);
+    private  static  final  Map<Long, Group> GROUPS = new HashMap<>(); // список групп
 
-    private void updateIndices(Group group) {
-        idToGroup.computeIfAbsent(group.getIdDepartment(), id -> new ArrayList<>()).add(group);
-    }
+    private static Map<Long, List<Group>> byDepartmentId = Collections.emptyMap(); // список отсортированых по факультету
 
-    private void updateIndices(Group... groups) {
-        for (Group group : groups) {
-            idToGroup.computeIfAbsent(group.getIdDepartment(), id -> new ArrayList<>()).add(group);
-        }
-    }
+    private static Map<String, List<Group>> byName = Collections.emptyMap(); // по группам
 
-    {
-        Group groupG1 = new Group(1L, "Group_G1");
-        Group groupG2 = new Group(1L, "Group_G2");
-        Group groupG3 = new Group(1L, "Group_G3");
-        Group groupS1 = new Group(2L, "Group_S1");
-        Group groupS2 = new Group(2L, "Group_S2");
-        Group groupS3 = new Group(2L, "Group_S3");
-        updateIndices(groupS1, groupS2, groupS3, groupG1, groupG2, groupG3);
-    }
 
-    public Map<Long, List<Group>> getIdToGroup() {
-        return idToGroup;
-    }
 
     @Override
     public Group save(Group group) {
-        updateIndices(group);
-        return group;
-
-    }
-
-    @Override
-    public Group findById(Long id) {
-        if (id >= 0) {
-            for (List<Group> value : idToGroup.values()) {
-                for (Group group : value) {
-                    if (group.getId().equals(id)) {
-                        return group;
-                    }
-                }
-            }
+        Objects.requireNonNull(group);
+        Long id = group.getId();
+        if (id == null) {
+            id = SEQUENCE.getAndIncrement();
+            group.setId(id);
         }
-        throw new EntityNotFoundException();
+        GROUPS.put(id, group);
+        updateIndices();
+        return GROUPS.get(id);
     }
 
     @Override
     public void update(Group group) {
-        updateIndices(group);
+        save(group);
+    }
+
+    @Override
+    public Optional<Group> findById(Long id) {
+        Objects.requireNonNull(id);
+        return Optional.ofNullable(GROUPS.get(id));
+    }
+
+    @Override
+    public List<Group> findByDepartmentId(Long id) {
+        Objects.requireNonNull(id);
+        return byDepartmentId.getOrDefault(id, Collections.emptyList());
+    }
+
+    @Override
+    public List<Group> findByName(String name) {
+        Objects.requireNonNull(name);
+        return byName.getOrDefault(name, Collections.emptyList());
     }
 
     @Override
     public Group deleteById(Long id) {
-        if (id >= 0) {
-            for (List<Group> value : idToGroup.values()) {
-                for (Group group : value) {
-                    if (group.getId().equals(id)) {
-                        value.remove(group);
-                    }
-                }
-            }
-        }
-        throw new EntityNotFoundException();
+        Objects.requireNonNull(id);
+        Group group = GROUPS.remove(id);
+        updateIndices();
+        return group;
     }
 
     private GroupRepositoryImpl() {
     }
 
-    public static GroupRepositoryImpl getInstance() {
-        if (instance == null) {
-            instance = new GroupRepositoryImpl();
-        }
-        return instance;
+    {
+        save(new Group(1L, "Group_G1"));
+        save(new Group(1L, "Group_G2"));
+        save(new Group(1L, "Group_G3"));
+        save(new Group(2L, "Group_S1"));
+        save(new Group(2L, "Group_S2"));
+        save(new Group(2L, "Group_S3"));
+        updateIndices();
+    }
+
+    public static Map<Long, List<Group>> getByDepartmentId() {
+        return byDepartmentId;
+    }
+
+    public static Map<String, List<Group>> getByName() {
+        return byName;
+    }
+
+    private void updateIndices() {
+        byDepartmentId = GROUPS.values().stream().collect(Collectors.groupingBy(Group::getId));
+        byName = GROUPS.values().stream().collect(Collectors.groupingBy(Group::getName));
     }
 }
