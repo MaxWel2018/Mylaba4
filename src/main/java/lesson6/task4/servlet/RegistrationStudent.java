@@ -5,7 +5,6 @@ import lesson6.task4.domain.Department;
 import lesson6.task4.domain.Student;
 import lesson6.task4.repository.DepartmentRepositoryImpl;
 import lesson6.task4.repository.GroupRepositoryImpl;
-import lesson6.task4.repository.StudentRepository;
 import lesson6.task4.repository.StudentRepositoryImpl;
 import lesson6.task4.service.StudentServiceImpl;
 
@@ -22,7 +21,7 @@ import static java.lang.Long.parseLong;
 
 @WebServlet("/register")
 public class RegistrationStudent extends HttpServlet {
-    private StudentRepository studentRepository = StudentRepositoryImpl.getInstance();
+    private StudentRepositoryImpl studentRepository = StudentRepositoryImpl.getInstance();
     private DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.getInstance();
     private GroupRepositoryImpl groupRepository = GroupRepositoryImpl.getInstance();
     private StudentServiceImpl studentService = new StudentServiceImpl(studentRepository);

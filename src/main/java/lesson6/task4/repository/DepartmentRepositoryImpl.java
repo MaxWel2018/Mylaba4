@@ -5,7 +5,7 @@ import lesson6.task4.domain.Department;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DepartmentRepositoryImpl implements DepartmentRepository {
+public class DepartmentRepositoryImpl implements Repository<Department> {
     private Map<Long, Department> idToDepartment = new HashMap<>();
     private static DepartmentRepositoryImpl instance;
 

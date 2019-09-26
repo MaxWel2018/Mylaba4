@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GroupRepositoryImpl implements GroupRepository {
+public class GroupRepositoryImpl implements  Repository<Group> {
     private static GroupRepositoryImpl instance;
     private Map<Long, List<Group>> idToGroup = new HashMap<>();
 

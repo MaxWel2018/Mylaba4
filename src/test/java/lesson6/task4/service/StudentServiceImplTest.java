@@ -1,19 +1,16 @@
 package lesson6.task4.service;
 
-import lesson6.task4.domain.Student;
-import lesson6.task4.repository.StudentRepository;
+import lesson6.task4.repository.Repository;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StudentServiceImplTest {
@@ -45,7 +42,7 @@ public class StudentServiceImplTest {
 //    private StudentServiceImpl studentService = new StudentServiceImpl(studentRepository);
 
     @Mock
-    private StudentRepository studentRepository;
+    private Repository studentRepository;
 
     @InjectMocks
     private StudentServiceImpl studentService;

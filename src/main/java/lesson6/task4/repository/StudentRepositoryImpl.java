@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class StudentRepositoryImpl implements StudentRepository {
+public class StudentRepositoryImpl implements Repository<Student> {
     private static StudentRepositoryImpl instance;
     private Map<Long, Student> idToStudents = new HashMap<>();
 
@@ -48,7 +48,6 @@ public class StudentRepositoryImpl implements StudentRepository {
         } else return instance;
     }
 
-    @Override
     public List filterByGroup(String nameGroup) {
         if (idToStudents != null && nameGroup != null) {
             List<Student> filteredStudents = idToStudents.values().stream()
@@ -61,7 +60,6 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     }
 
-    @Override
     public List filterByAfterGivenYear(int year) {
         if (idToStudents != null && year >= 0) {
             List filteredStudents = idToStudents.values().stream()
@@ -73,7 +71,6 @@ public class StudentRepositoryImpl implements StudentRepository {
         } else throw new IllegalArgumentException();
     }
 
-    @Override
     public Map<String, List> filterByAllDepartmentAndAllCourse() {
         DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.getInstance();
         Map<Long, Department> idToDepartment = departmentRepository.getIdToDepartment();

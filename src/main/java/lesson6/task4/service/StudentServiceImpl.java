@@ -1,16 +1,16 @@
 package lesson6.task4.service;
 
 import lesson6.task4.domain.Student;
-import lesson6.task4.repository.StudentRepository;
+import lesson6.task4.repository.StudentRepositoryImpl;
 
 import java.util.List;
 import java.util.Map;
 
 public class StudentServiceImpl implements StudentService {
-    private final StudentRepository studentRepository;
+    private final StudentRepositoryImpl studentRepository;
 
-    public StudentServiceImpl(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
+    public StudentServiceImpl(StudentRepositoryImpl studentRepository) {
+        this.studentRepository =  studentRepository;
     }
 
     void filterByFacultyAndCourse() {
