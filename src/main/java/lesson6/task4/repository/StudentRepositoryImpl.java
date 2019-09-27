@@ -9,11 +9,17 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class StudentRepositoryImpl implements Repository<Student> {
-    public static final StudentRepositoryImpl STUDENT_REPOSITORY = new StudentRepositoryImpl();
     private static final Map<Long, Student> STUDENTS = new HashMap<>();
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
-    private static Map<Long, List<Student>> byDepartmentId = Collections.emptyMap(); // список отсортированых по факультету
-    private static Map<String, List<Student>> byName = Collections.emptyMap(); // по группам
+    private static Map<String, List<Student>> byDepartmentName = Collections.emptyMap();
+    private static Map<Long, List<Student>> byDepartmentId = Collections.emptyMap();
+    private static Map<String, List<Student>> byName = Collections.emptyMap();
+    private static Map<String, List<Student>> byGroup   = Collections.emptyMap();
+    public static final StudentRepositoryImpl STUDENT_REPOSITORY = new StudentRepositoryImpl();
+
+    public  StudentRepositoryImpl getStudentRepository() {
+        return STUDENT_REPOSITORY;
+    }
 
     {
 
@@ -43,27 +49,22 @@ public class StudentRepositoryImpl implements Repository<Student> {
     private StudentRepositoryImpl() {
     }
 
-    private void updateIndices() {
-        byDepartmentId = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getId));
-        byName = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getName));
-    }
 
-    public List filterByGroup(String nameGroup) {
+    public List<Student> filterByGroup(String nameGroup) {
         Objects.requireNonNull(nameGroup);
-        return GroupRepositoryImpl.GROUP_REPOSITORY.findByName(nameGroup);
+        return StudentRepositoryImpl.STUDENT_REPOSITORY.findByGroup(nameGroup);
 
     }
 
-    public List filterByAfterGivenYear(int year) {
-        Objects.requireNonNull(year);
+    public List<Student> filterByAfterGivenYear(int year) {
         return STUDENTS.values().stream()
                 .filter(x -> x.getBirthday().getYear() >= year)
                 .collect(Collectors.toList());
     }
 
-    public List filterByDepartment(String nameDepartment) {
+    public List<Student> filterByDepartment(String nameDepartment) {
         Objects.requireNonNull(nameDepartment);
-        return DepartmentRepositoryImpl.DEPARTMENT_REPOSITORY.findByName(nameDepartment);
+        return StudentRepositoryImpl.STUDENT_REPOSITORY.findByDepartmentName(nameDepartment);
     }
 
     @Override
@@ -91,15 +92,33 @@ public class StudentRepositoryImpl implements Repository<Student> {
         return byDepartmentId.getOrDefault(id, Collections.emptyList());
     }
 
+
     @Override
     public List<Student> findByName(String name) {
         Objects.requireNonNull(name);
         return byName.getOrDefault(name, Collections.emptyList());
     }
 
+    public List<Student> findByGroup(String name) {
+        Objects.requireNonNull(name);
+        return byGroup.getOrDefault(name, Collections.emptyList());
+    }
+
+    public List<Student> findByDepartmentName(String nameDepartment) {
+        Objects.requireNonNull(nameDepartment);
+        return byDepartmentName.getOrDefault(nameDepartment, Collections.emptyList());
+    }
+
     @Override
     public void update(Student student) {
         save(student);
+    }
+
+    private void updateIndices() {
+        byDepartmentId = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getId));
+        byName = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getName));
+        byGroup = STUDENTS.values().stream().collect(Collectors.groupingBy((Student student) -> student.getGroup().getName()));
+        byDepartmentName = STUDENTS.values().stream().collect(Collectors.groupingBy(student1 -> student1.getDepartment().getName()));
     }
 
     @Override

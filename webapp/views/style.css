@@ -1,3 +1,6 @@
+html{
+    font-family: 'Open Sans', sans-serif;
+}
 input{
     display: block;
     margin-bottom:10px;
@@ -46,5 +49,9 @@ p {
 .button_back{
     width: 50px;
     padding: 7px;
+}
+.flex{
+    display: flex;
+    justify-content: space-between;
 }
 

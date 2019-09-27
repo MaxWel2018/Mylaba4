@@ -98,6 +98,7 @@ public class Student {
         private String phoneNumber;
         private Group group;
 
+
         private Builder() {
         }
 
@@ -116,7 +117,10 @@ public class Student {
             return new Student(id, this);
         }
 
-
+        public Builder withId(Long id) {
+            this.id = id;
+            return this;
+        }
         public Builder withGroup(Group group) {
             this.group = group;
             return this;

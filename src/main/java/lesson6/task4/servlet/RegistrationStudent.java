@@ -4,7 +4,6 @@ import lesson6.task4.domain.Address;
 import lesson6.task4.domain.Student;
 import lesson6.task4.repository.DepartmentRepositoryImpl;
 import lesson6.task4.repository.GroupRepositoryImpl;
-import lesson6.task4.repository.Repository;
 import lesson6.task4.repository.StudentRepositoryImpl;
 import lesson6.task4.service.StudentServiceImpl;
 
@@ -17,12 +16,13 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import static java.lang.Integer.parseInt;
+import static lesson6.task4.utility.RegexTemplate.*;
 
 @WebServlet("/register")
 public class RegistrationStudent extends HttpServlet {
-    private DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.DEPARTMENT_REPOSITORY;
-    private GroupRepositoryImpl groupRepository = GroupRepositoryImpl.GROUP_REPOSITORY;
-    private StudentServiceImpl studentService = new StudentServiceImpl(StudentRepositoryImpl.STUDENT_REPOSITORY);
+    private static DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.DEPARTMENT_REPOSITORY;
+    private static GroupRepositoryImpl groupRepository = GroupRepositoryImpl.GROUP_REPOSITORY;
+    private static StudentServiceImpl studentService = new StudentServiceImpl(StudentRepositoryImpl.STUDENT_REPOSITORY);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -33,12 +33,31 @@ public class RegistrationStudent extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Student student = Student.builder().withName(req.getParameter("name"))
-                .withSurname(req.getParameter("secondName"))
-                .withAddress(new Address(req.getParameter("nameStreet"),
-                        parseInt(req.getParameter("numberApartment"))))
-                .withPhoneNumber(req.getParameter("phone"))
-                .withBirthday(LocalDate.parse(req.getParameter("birthday")))
+        String name, surName, nameStreet, phone, birthday, numApartment;
+        if (studentService.checkWithRegExp(req.getParameter("name"), REGEX_FOR_NAME))
+            name = req.getParameter("name");
+        else throw new IllegalArgumentException();
+        if (studentService.checkWithRegExp(req.getParameter("secondName"), REGEX_FOR_NAME))
+            surName = req.getParameter("secondName");
+        else throw new IllegalArgumentException();
+        if (studentService.checkWithRegExp(req.getParameter("nameStreet"), REGEX_FOR_NAME))
+            nameStreet = req.getParameter("nameStreet");
+        else throw new IllegalArgumentException();
+        if (studentService.checkWithRegExp(req.getParameter("numberApartment"), REGEX_FOR_NUMBER))
+            numApartment = req.getParameter("numberApartment");
+        else throw new IllegalArgumentException();
+        if (studentService.checkWithRegExp(req.getParameter("phone"), REGEX_FOR_PHONE_NUMBER))
+            surName = req.getParameter("phone");
+        else throw new IllegalArgumentException();
+        if (studentService.checkWithRegExp(req.getParameter("birthday"), REGEX_FOR_BIRTHDAY))
+            birthday = req.getParameter("birthday");
+        else throw new IllegalArgumentException();
+
+        Student student = Student.builder().withName(name)
+                .withSurname(surName)
+                .withAddress(new Address(nameStreet, parseInt(numApartment)))
+                .withPhoneNumber(numApartment)
+                .withBirthday(LocalDate.parse(birthday))
                 .withDepartment(departmentRepository.findById(Long.valueOf(req.getParameter("department"))).get())
                 .withGroup(groupRepository.findById(Long.valueOf(req.getParameter("group"))).get())
                 .build();

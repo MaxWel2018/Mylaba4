@@ -1,17 +1,18 @@
 package lesson6.task4.repository;
 
 import lesson6.task4.domain.Group;
+import lesson6.task4.domain.Student;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class GroupRepositoryImpl implements Repository<Group> {
-    public static final GroupRepositoryImpl GROUP_REPOSITORY = new GroupRepositoryImpl();
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
-    private static final Map<Long, Group> GROUPS = new HashMap<>(); // список групп
-    private static Map<Long, List<Group>> byDepartmentId = Collections.emptyMap(); // список отсортированых по факультету
-    private static Map<String, List<Group>> byName = Collections.emptyMap(); // по группам
+    private static final Map<Long, Group> GROUPS = new HashMap<>();
+    private static Map<Long, List<Group>> byDepartmentId = Collections.emptyMap();
+    private static Map<String, List<Group>> byName = Collections.emptyMap();
+    public static final GroupRepositoryImpl GROUP_REPOSITORY = new GroupRepositoryImpl();
 
     {
         save(new Group(1L, "Group_G1"));
@@ -55,6 +56,7 @@ public class GroupRepositoryImpl implements Repository<Group> {
         updateIndices();
         return GROUPS.get(id);
     }
+
 
     @Override
     public void update(Group group) {

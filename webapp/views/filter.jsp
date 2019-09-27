@@ -5,9 +5,15 @@
   Time: 11:28
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="language"
+       value="${not empty param.language ? param.language : not empty language ? language : pageContext.request.locale}"
+       scope="session"/>
+<fmt:setLocale value="${language}"/>
+<fmt:setBundle basename="messages"/>
+<html lang="${param.lang}">
 <head>
     <title>Title</title>
     <link rel="stylesheet" href="/views/style.css">
@@ -19,28 +25,28 @@
 
     <tr class="red">
         <td>
-           Name
+            <fmt:message key="registation.label.name"/>
         </td>
         <td>
-           SurName
+            <fmt:message key="registation.label.secondName"/>
         </td>
         <td>
-           Group
+            <fmt:message key="registation.label.group"/>
         </td>
         <td>
-          Department
+            <fmt:message key="registation.label.department"/>
         </td>
         <td>
-           Phone Number
+            <fmt:message key="registation.label.phone"/>
         </td>
         <td>
-           Street
+            <fmt:message key="registation.label.nameStreet"/>
         </td>
         <td>
-        Apartment Number
+            <fmt:message key="registation.label.numAppartmant"/>
         </td>
         <td>
-           BirthDay
+            <fmt:message key="registation.label.birthday"/>
         </td>
     </tr>
     <c:forEach items="${filterGroup}" var="sort">
@@ -74,8 +80,15 @@
 
 </table>
 
-<a  class="button button_reg" href="${pageContext.servletContext.contextPath}/menu"> Back to menu</a>
 
+<a class="button button_reg" href="${pageContext.servletContext.contextPath}/menu"> <fmt:message key="registation.button.submit"/></a>
+<form>
+    <select id="language" name="language" onchange="submit()">
+        <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
+        <option value="de" ${language == 'de' ? 'selected' : ''}>German</option>
+        <option value="fr" ${language == 'fr' ? 'selected' : ''}>France</option>
+    </select>
+</form>
 
 </body>
 </html>
