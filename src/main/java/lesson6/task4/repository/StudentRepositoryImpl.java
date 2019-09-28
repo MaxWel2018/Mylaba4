@@ -15,7 +15,6 @@ public class StudentRepositoryImpl implements StudentRepository {
     private static Map<String, List<Student>> byName = Collections.emptyMap();
     private static Map<String, List<Student>> byGroup = Collections.emptyMap();
     private static Map<Long, Student> idToStudents = new HashMap<>();
-    private static StudentRepositoryImpl instance;
 
 
     {
@@ -42,21 +41,10 @@ public class StudentRepositoryImpl implements StudentRepository {
         );
     }
 
-
-    private StudentRepositoryImpl() {
-    }
-
-    public static StudentRepositoryImpl getInstance() {
-        if (instance == null) {
-            instance = new StudentRepositoryImpl();
-        }
-        return instance;
-    }
-
     @Override
     public List<Student> filterByGroup(String nameGroup) {
         Objects.requireNonNull(nameGroup);
-        return StudentRepositoryImpl.instance.findByGroup(nameGroup);
+        return findByGroup(nameGroup);
 
     }
 
@@ -70,7 +58,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     @Override
     public List<Student> filterByDepartment(String nameDepartment) {
         Objects.requireNonNull(nameDepartment);
-        return StudentRepositoryImpl.instance.findByDepartmentName(nameDepartment);
+        return findByDepartmentName(nameDepartment);
     }
 
     @Override

@@ -9,26 +9,16 @@ import java.util.stream.Collectors;
 public class DepartmentRepositoryImpl implements DepartmentRepository {
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
     private static Map<String, List<Department>> byName = Collections.emptyMap();
-    private static Map<Long, Department> idToDepartment = Collections.emptyMap();
-    private static DepartmentRepositoryImpl instance;
+    private static Map<Long, Department> idToDepartment = new HashMap<>();
 
-    {
+  static{
         Department gryffindor = new Department(1L, "Gryffindor");
         Department slytherin = new Department(2L, "Slytherin");
         idToDepartment.put(gryffindor.getId(), gryffindor);
         idToDepartment.put(slytherin.getId(), slytherin);
     }
 
-    private DepartmentRepositoryImpl() {
 
-    }
-
-    public static DepartmentRepositoryImpl getInstance() {
-        if (instance == null) {
-            instance = new DepartmentRepositoryImpl();
-        }
-        return instance;
-    }
 
     public static Map<Long, Department> getIdToDepartment() {
         return idToDepartment;

@@ -11,7 +11,6 @@ public class GroupRepositoryImpl implements GroupRepository {
     private static Map<Long, List<Group>> byDepartmentId = Collections.emptyMap();
     private static Map<String, List<Group>> byName = Collections.emptyMap();
     private static Map<Long, Group> idToGroup = new HashMap<>();
-    private static GroupRepositoryImpl instance;
 
     {
         save(new Group(1L, "Group_G1"));
@@ -23,15 +22,9 @@ public class GroupRepositoryImpl implements GroupRepository {
         updateIndices();
     }
 
-    private GroupRepositoryImpl() {
-    }
 
-    public static GroupRepositoryImpl getInstance() {
-        if (instance == null) {
-            instance = new GroupRepositoryImpl();
-        }
-        return instance;
-    }
+
+
 
     public static Map<Long, Group> getIdToGroup() {
         return idToGroup;

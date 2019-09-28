@@ -21,9 +21,10 @@ import static lesson6.task4.utility.RegexTemplate.*;
 
 @WebServlet("/register")
 public class RegistrationStudent extends HttpServlet {
-    private StudentRepository studentRepository = StudentRepositoryImpl.getInstance();
-    private GroupRepositoryImpl groupRepository = GroupRepositoryImpl.getInstance();
-    private DepartmentRepositoryImpl departmentRepository = DepartmentRepositoryImpl.getInstance();
+    private StudentRepository studentRepository = new StudentRepositoryImpl();
+    private GroupRepositoryImpl groupRepository = new GroupRepositoryImpl();
+    private DepartmentRepositoryImpl departmentRepository = new DepartmentRepositoryImpl();
+
     private StudentServiceImpl studentService = new StudentServiceImpl(studentRepository,groupRepository,departmentRepository);
 
     @Override
