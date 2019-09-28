@@ -1,11 +1,16 @@
 package lesson6.task4.domain;
 
+import java.util.Objects;
+
 public class Group {
     private final Long idDepartment;
     private final String name;
     private Long id;
 
+
     public Group(Long idDepartment, String name) {
+        Objects.requireNonNull(idDepartment);
+        Objects.requireNonNull(name);
         this.idDepartment = idDepartment;
         this.name = name;
     }
@@ -21,6 +26,7 @@ public class Group {
     public Long getIdDepartment() {
         return idDepartment;
     }
+
     public String getName() {
         return name;
     }

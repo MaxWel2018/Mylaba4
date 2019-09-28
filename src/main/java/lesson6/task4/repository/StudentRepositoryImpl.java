@@ -8,18 +8,15 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-public class StudentRepositoryImpl implements Repository<Student> {
-    private static final Map<Long, Student> STUDENTS = new HashMap<>();
+public class StudentRepositoryImpl implements StudentRepository {
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
     private static Map<String, List<Student>> byDepartmentName = Collections.emptyMap();
     private static Map<Long, List<Student>> byDepartmentId = Collections.emptyMap();
     private static Map<String, List<Student>> byName = Collections.emptyMap();
-    private static Map<String, List<Student>> byGroup   = Collections.emptyMap();
-    public static final StudentRepositoryImpl STUDENT_REPOSITORY = new StudentRepositoryImpl();
+    private static Map<String, List<Student>> byGroup = Collections.emptyMap();
+    private static Map<Long, Student> idToStudents = new HashMap<>();
+    private static StudentRepositoryImpl instance;
 
-    public  StudentRepositoryImpl getStudentRepository() {
-        return STUDENT_REPOSITORY;
-    }
 
     {
 
@@ -49,22 +46,31 @@ public class StudentRepositoryImpl implements Repository<Student> {
     private StudentRepositoryImpl() {
     }
 
+    public static StudentRepositoryImpl getInstance() {
+        if (instance == null) {
+            instance = new StudentRepositoryImpl();
+        }
+        return instance;
+    }
 
+    @Override
     public List<Student> filterByGroup(String nameGroup) {
         Objects.requireNonNull(nameGroup);
-        return StudentRepositoryImpl.STUDENT_REPOSITORY.findByGroup(nameGroup);
+        return StudentRepositoryImpl.instance.findByGroup(nameGroup);
 
     }
 
+    @Override
     public List<Student> filterByAfterGivenYear(int year) {
-        return STUDENTS.values().stream()
+        return idToStudents.values().stream()
                 .filter(x -> x.getBirthday().getYear() >= year)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Student> filterByDepartment(String nameDepartment) {
         Objects.requireNonNull(nameDepartment);
-        return StudentRepositoryImpl.STUDENT_REPOSITORY.findByDepartmentName(nameDepartment);
+        return StudentRepositoryImpl.instance.findByDepartmentName(nameDepartment);
     }
 
     @Override
@@ -75,15 +81,15 @@ public class StudentRepositoryImpl implements Repository<Student> {
             id = SEQUENCE.getAndIncrement();
             student.setId(id);
         }
-        STUDENTS.put(id, student);
+        idToStudents.put(id, student);
         updateIndices();
-        return STUDENTS.get(id);
+        return idToStudents.get(id);
     }
 
     @Override
     public Optional<Student> findById(Long id) {
         Objects.requireNonNull(id);
-        return Optional.ofNullable(STUDENTS.get(id));
+        return Optional.ofNullable(idToStudents.get(id));
     }
 
     @Override
@@ -92,18 +98,19 @@ public class StudentRepositoryImpl implements Repository<Student> {
         return byDepartmentId.getOrDefault(id, Collections.emptyList());
     }
 
-
     @Override
     public List<Student> findByName(String name) {
         Objects.requireNonNull(name);
         return byName.getOrDefault(name, Collections.emptyList());
     }
 
+    @Override
     public List<Student> findByGroup(String name) {
         Objects.requireNonNull(name);
         return byGroup.getOrDefault(name, Collections.emptyList());
     }
 
+    @Override
     public List<Student> findByDepartmentName(String nameDepartment) {
         Objects.requireNonNull(nameDepartment);
         return byDepartmentName.getOrDefault(nameDepartment, Collections.emptyList());
@@ -115,16 +122,16 @@ public class StudentRepositoryImpl implements Repository<Student> {
     }
 
     private void updateIndices() {
-        byDepartmentId = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getId));
-        byName = STUDENTS.values().stream().collect(Collectors.groupingBy(Student::getName));
-        byGroup = STUDENTS.values().stream().collect(Collectors.groupingBy((Student student) -> student.getGroup().getName()));
-        byDepartmentName = STUDENTS.values().stream().collect(Collectors.groupingBy(student1 -> student1.getDepartment().getName()));
+        byDepartmentId = idToStudents.values().stream().collect(Collectors.groupingBy(Student::getId));
+        byName = idToStudents.values().stream().collect(Collectors.groupingBy(Student::getName));
+        byGroup = idToStudents.values().stream().collect(Collectors.groupingBy((Student student) -> student.getGroup().getName()));
+        byDepartmentName = idToStudents.values().stream().collect(Collectors.groupingBy(student1 -> student1.getDepartment().getName()));
     }
 
     @Override
     public Student deleteById(Long id) {
         Objects.requireNonNull(id);
-        Student student = STUDENTS.remove(id);
+        Student student = idToStudents.remove(id);
         updateIndices();
         return student;
     }

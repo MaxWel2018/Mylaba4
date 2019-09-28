@@ -1,18 +1,17 @@
 package lesson6.task4.repository;
 
 import lesson6.task4.domain.Group;
-import lesson6.task4.domain.Student;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-public class GroupRepositoryImpl implements Repository<Group> {
+public class GroupRepositoryImpl implements GroupRepository {
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
-    private static final Map<Long, Group> GROUPS = new HashMap<>();
     private static Map<Long, List<Group>> byDepartmentId = Collections.emptyMap();
     private static Map<String, List<Group>> byName = Collections.emptyMap();
-    public static final GroupRepositoryImpl GROUP_REPOSITORY = new GroupRepositoryImpl();
+    private static Map<Long, Group> idToGroup = new HashMap<>();
+    private static GroupRepositoryImpl instance;
 
     {
         save(new Group(1L, "Group_G1"));
@@ -27,21 +26,15 @@ public class GroupRepositoryImpl implements Repository<Group> {
     private GroupRepositoryImpl() {
     }
 
-    public static Map<Long, List<Group>> getByDepartmentId() {
-        return byDepartmentId;
+    public static GroupRepositoryImpl getInstance() {
+        if (instance == null) {
+            instance = new GroupRepositoryImpl();
+        }
+        return instance;
     }
 
-    public static Map<String, List<Group>> getByName() {
-        return byName;
-    }
-
-    public static GroupRepositoryImpl getGroupRepository() {
-        return GROUP_REPOSITORY;
-
-    }
-
-    public static Map<Long, Group> getGROUPS() {
-        return GROUPS;
+    public static Map<Long, Group> getIdToGroup() {
+        return idToGroup;
     }
 
     @Override
@@ -52,11 +45,10 @@ public class GroupRepositoryImpl implements Repository<Group> {
             id = SEQUENCE.getAndIncrement();
             group.setId(id);
         }
-        GROUPS.put(id, group);
+        idToGroup.put(id, group);
         updateIndices();
-        return GROUPS.get(id);
+        return idToGroup.get(id);
     }
-
 
     @Override
     public void update(Group group) {
@@ -64,9 +56,9 @@ public class GroupRepositoryImpl implements Repository<Group> {
     }
 
     @Override
-    public  Optional<Group> findById(Long id) {
+    public Optional<Group> findById(Long id) {
         Objects.requireNonNull(id);
-        return Optional.ofNullable(GROUPS.get(id));
+        return Optional.ofNullable(idToGroup.get(id));
     }
 
     @Override
@@ -84,13 +76,13 @@ public class GroupRepositoryImpl implements Repository<Group> {
     @Override
     public Group deleteById(Long id) {
         Objects.requireNonNull(id);
-        Group group = GROUPS.remove(id);
+        Group group = idToGroup.remove(id);
         updateIndices();
         return group;
     }
 
     private void updateIndices() {
-        byDepartmentId = GROUPS.values().stream().collect(Collectors.groupingBy(Group::getId));
-        byName = GROUPS.values().stream().collect(Collectors.groupingBy(Group::getName));
+        byDepartmentId = idToGroup.values().stream().collect(Collectors.groupingBy(Group::getIdDepartment));
+        byName = idToGroup.values().stream().collect(Collectors.groupingBy(Group::getName));
     }
 }

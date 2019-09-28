@@ -6,27 +6,32 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-public class DepartmentRepositoryImpl implements Repository<Department> {
+public class DepartmentRepositoryImpl implements DepartmentRepository {
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
-    private static final Map<Long, Department> DEPARMENTS = new HashMap<>();
-    private static Map<Long, List<Department>> byDepartmentId = Collections.emptyMap(); // список отсортированых по факультету
-    private static Map<String, List<Department>> byName = Collections.emptyMap(); // по группам
-    private static Map<String, List<Department>> byGroup = Collections.emptyMap();
-    public final static DepartmentRepositoryImpl DEPARTMENT_REPOSITORY = new DepartmentRepositoryImpl();
+    private static Map<String, List<Department>> byName = Collections.emptyMap();
+    private static Map<Long, Department> idToDepartment = Collections.emptyMap();
+    private static DepartmentRepositoryImpl instance;
 
     {
         Department gryffindor = new Department(1L, "Gryffindor");
         Department slytherin = new Department(2L, "Slytherin");
-        DEPARMENTS.put(gryffindor.getId(), gryffindor);
-        DEPARMENTS.put(slytherin.getId(), slytherin);
+        idToDepartment.put(gryffindor.getId(), gryffindor);
+        idToDepartment.put(slytherin.getId(), slytherin);
     }
 
     private DepartmentRepositoryImpl() {
 
     }
 
+    public static DepartmentRepositoryImpl getInstance() {
+        if (instance == null) {
+            instance = new DepartmentRepositoryImpl();
+        }
+        return instance;
+    }
+
     public static Map<Long, Department> getIdToDepartment() {
-        return DEPARMENTS;
+        return idToDepartment;
     }
 
     @Override
@@ -36,22 +41,15 @@ public class DepartmentRepositoryImpl implements Repository<Department> {
         if (id == null) {
             id = SEQUENCE.getAndIncrement();
         }
-        DEPARMENTS.put(id, department);
+        idToDepartment.put(id, department);
         updateIndices();
-        return DEPARMENTS.get(id);
+        return idToDepartment.get(id);
     }
-
 
     @Override
     public Optional<Department> findById(Long id) {
         Objects.requireNonNull(id);
-        return Optional.ofNullable(DEPARMENTS.get(id));
-    }
-
-    @Override
-    public List<Department> findByDepartmentId(Long id) {
-        Objects.requireNonNull(id);
-        return byDepartmentId.getOrDefault(id, Collections.emptyList());
+        return Optional.ofNullable(idToDepartment.get(id));
     }
 
     @Override
@@ -68,14 +66,13 @@ public class DepartmentRepositoryImpl implements Repository<Department> {
     @Override
     public Department deleteById(Long id) {
         Objects.requireNonNull(id);
-        Department department = DEPARMENTS.remove(id);
+        Department department = idToDepartment.remove(id);
         updateIndices();
         return department;
     }
 
     private void updateIndices() {
-        byDepartmentId = DEPARMENTS.values().stream().collect(Collectors.groupingBy(Department::getId));
-        byName = DEPARMENTS.values().stream().collect(Collectors.groupingBy(Department::getName));
-
+        byName = idToDepartment.values().stream().collect(Collectors.groupingBy(Department::getName));
     }
+
 }

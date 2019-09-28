@@ -9,21 +9,20 @@ public class Student {
     private final String surname;
     private final LocalDate birthday;
     private final Address address;
-    private final Department department;
     private final String phoneNumber;
     private final Group group;
+    private final Department department;
 
 
 
-    private Student(Long id, Builder builder) {
-        this.id = id;
+    private Student(Builder builder) {
         this.name = builder.name;
         this.surname = builder.surname;
         this.birthday = builder.birthday;
         this.address = builder.address;
-        this.department = builder.department;
         this.phoneNumber = builder.phoneNumber;
         this.group = builder.group;
+        this.department = builder.department;
     }
 
     public static Builder builder() {
@@ -37,6 +36,13 @@ public class Student {
     public Long getId() {
         return id;
     }
+
+    public Long getNameDepartment() {
+
+        return group.getIdDepartment();
+
+    }
+
 
     public String getName() {
         return name;
@@ -54,12 +60,12 @@ public class Student {
         return address;
     }
 
-    public Group getGroup() {
-        return group;
-    }
-
     public Department getDepartment() {
         return department;
+    }
+
+    public Group getGroup() {
+        return group;
     }
 
     public String getPhoneNumber() {
@@ -77,24 +83,23 @@ public class Student {
                 Objects.equals(surname, student.surname) &&
                 Objects.equals(birthday, student.birthday) &&
                 Objects.equals(address, student.address) &&
-                Objects.equals(department, student.department) &&
                 Objects.equals(phoneNumber, student.phoneNumber) &&
                 Objects.equals(group, student.group);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname, birthday, address, department, phoneNumber, group);
+        return Objects.hash(id, name, surname, birthday, address,  phoneNumber, group);
     }
 
     public static class Builder {
         private static volatile Builder mInstance;
+        public Department department;
         private Long id;
         private String name;
         private String surname;
         private LocalDate birthday;
         private Address address;
-        private Department department;
         private String phoneNumber;
         private Group group;
 
@@ -114,7 +119,7 @@ public class Student {
         }
 
         public Student build() {
-            return new Student(id, this);
+            return new Student(this);
         }
 
         public Builder withId(Long id) {
@@ -147,14 +152,9 @@ public class Student {
         }
 
         public Builder withDepartment(Department department) {
-            if (department!=null) {
-                this.department = department;
-            }else{
-                this.department = new Department(0L, "" );
-            }
+            this.department = department;
             return this;
         }
-
 
         public Builder withPhoneNumber(String phoneNumber) {
             if (phoneNumber!=null) {
@@ -162,6 +162,8 @@ public class Student {
             }else     this.phoneNumber = "";
             return this;
         }
+
+
     }
 
     @Override
@@ -172,7 +174,7 @@ public class Student {
                 ", surname='" + surname + '\'' +
                 ", birthday=" + birthday +
                 "," + address +
-                ", department=" + department +
+                ", department=" + group.getIdDepartment() +
                 ", phoneNumber=" + phoneNumber +
                 ", group=" + group +
                 '}';
