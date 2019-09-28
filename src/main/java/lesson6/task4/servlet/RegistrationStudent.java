@@ -34,7 +34,7 @@ public class RegistrationStudent extends HttpServlet {
         req.setAttribute("REGEX_FOR_NAME",REGEX_FOR_NAME);
         req.setAttribute("REGEX_FOR_NUMBER",REGEX_FOR_NUMBER);
         req.setAttribute("REGEX_FOR_PHONE_NUMBER",REGEX_FOR_PHONE_NUMBER);
-        req.getRequestDispatcher("/webapp/views/registration.jsp").forward(req, resp);
+        req.getRequestDispatcher("registration.jsp").forward(req, resp);
     }
 
     @Override
