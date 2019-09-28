@@ -25,42 +25,27 @@ public class RegistrationStudent extends HttpServlet {
     private GroupRepositoryImpl groupRepository = new GroupRepositoryImpl();
     private DepartmentRepositoryImpl departmentRepository = new DepartmentRepositoryImpl();
 
-    private StudentServiceImpl studentService = new StudentServiceImpl(studentRepository,groupRepository,departmentRepository);
+    private StudentServiceImpl studentService = new StudentServiceImpl(studentRepository, groupRepository, departmentRepository);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("departments", DepartmentRepositoryImpl.getIdToDepartment());
         req.setAttribute("groups", GroupRepositoryImpl.getIdToGroup());
-        req.getRequestDispatcher("/views/registration.jsp").forward(req, resp);
+        req.setAttribute("REGEX_FOR_NAME",REGEX_FOR_NAME);
+        req.setAttribute("REGEX_FOR_NUMBER",REGEX_FOR_NUMBER);
+        req.setAttribute("REGEX_FOR_PHONE_NUMBER",REGEX_FOR_PHONE_NUMBER);
+        req.getRequestDispatcher("/webapp/views/registration.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name, surName, nameStreet, phone, birthday, numApartment;
-        if (studentService.checkWithRegExp(req.getParameter("name"), REGEX_FOR_NAME))
-            name = req.getParameter("name");
-        else throw new IllegalArgumentException();
-        if (studentService.checkWithRegExp(req.getParameter("secondName"), REGEX_FOR_NAME))
-            surName = req.getParameter("secondName");
-        else throw new IllegalArgumentException();
-        if (studentService.checkWithRegExp(req.getParameter("nameStreet"), REGEX_FOR_NAME))
-            nameStreet = req.getParameter("nameStreet");
-        else throw new IllegalArgumentException();
-        if (studentService.checkWithRegExp(req.getParameter("numberApartment"), REGEX_FOR_NUMBER))
-            numApartment = req.getParameter("numberApartment");
-        else throw new IllegalArgumentException();
-        if (studentService.checkWithRegExp(req.getParameter("phone"), REGEX_FOR_PHONE_NUMBER))
-            surName = req.getParameter("phone");
-        else throw new IllegalArgumentException();
-        if (studentService.checkWithRegExp(req.getParameter("birthday"), REGEX_FOR_BIRTHDAY))
-            birthday = req.getParameter("birthday");
-        else throw new IllegalArgumentException();
+        studentService.userValidate(req.getParameterMap());
 
-        Student student = Student.builder().withName(name)
-                .withSurname(surName)
-                .withAddress(new Address(nameStreet, parseInt(numApartment)))
-                .withPhoneNumber(numApartment)
-                .withBirthday(LocalDate.parse(birthday))
+        Student student = Student.builder().withName(req.getParameter("name"))
+                .withSurname(req.getParameter("secondName"))
+                .withAddress(new Address(req.getParameter("nameStreet"), parseInt( req.getParameter("numberApartment"))))
+                .withPhoneNumber(req.getParameter("phone"))
+                .withBirthday(LocalDate.parse(req.getParameter("birthday")))
                 .withGroup(studentService.findGroupById(Long.valueOf(req.getParameter("group"))))
                 .withDepartment(studentService.findDepartmentByGroupId(Long.valueOf(req.getParameter("group"))))
                 .build();

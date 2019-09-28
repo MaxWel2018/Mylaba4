@@ -16,7 +16,7 @@
 <html lang="${param.lang}">
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="/views/style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
 
