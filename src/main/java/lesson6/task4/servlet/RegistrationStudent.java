@@ -4,9 +4,8 @@ import lesson6.task4.domain.Address;
 import lesson6.task4.domain.Student;
 import lesson6.task4.repository.DepartmentRepositoryImpl;
 import lesson6.task4.repository.GroupRepositoryImpl;
-import lesson6.task4.repository.StudentRepository;
-import lesson6.task4.repository.StudentRepositoryImpl;
 import lesson6.task4.service.StudentServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import javax.servlet.ServletException;
@@ -22,13 +21,12 @@ import static lesson6.task4.utility.RegexTemplate.*;
 
 @WebServlet("/register")
 public class RegistrationStudent extends HttpServlet {
-    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationСontext.xml");
-    private GroupRepositoryImpl groupRepository =
-            context.getBean("groupRepositoryImpl",GroupRepositoryImpl.class);
-    private DepartmentRepositoryImpl departmentRepository =
-            context.getBean("departmentRepositoryImpl",DepartmentRepositoryImpl.class);
-
-    private StudentServiceImpl studentService = context.getBean("studentServiceImpl",StudentServiceImpl.class);
+    @Autowired
+    private GroupRepositoryImpl groupRepository;
+    @Autowired
+    private DepartmentRepositoryImpl departmentRepository;
+    @Autowired
+    private StudentServiceImpl studentService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

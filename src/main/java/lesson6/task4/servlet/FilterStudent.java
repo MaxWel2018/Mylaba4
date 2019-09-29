@@ -1,11 +1,7 @@
 package lesson6.task4.servlet;
 
-import lesson6.task4.repository.DepartmentRepositoryImpl;
-import lesson6.task4.repository.GroupRepositoryImpl;
-import lesson6.task4.repository.StudentRepository;
-import lesson6.task4.repository.StudentRepositoryImpl;
 import lesson6.task4.service.StudentServiceImpl;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,10 +13,8 @@ import java.util.List;
 
 @WebServlet("/filter")
 public class FilterStudent extends HttpServlet {
-    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-            "applicationСontext.xml"
-    );
-    private StudentServiceImpl studentService = context.getBean("studentServiceImpl",StudentServiceImpl.class);
+    @Autowired
+    private StudentServiceImpl studentService;
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List students = studentService.filterByGroup("Group_G2");
         req.setAttribute("filterGroup", students);
