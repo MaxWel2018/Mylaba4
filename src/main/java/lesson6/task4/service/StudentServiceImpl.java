@@ -7,6 +7,8 @@ import lesson6.task4.repository.DepartmentRepository;
 import lesson6.task4.repository.GroupRepository;
 import lesson6.task4.repository.StudentRepository;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
@@ -17,13 +19,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static lesson6.task4.utility.RegexTemplate.*;
-
+@Component
 public class StudentServiceImpl implements StudentService, FilterService, ValidateService {
     private static final Logger LOGGER = Logger.getLogger(StudentServiceImpl.class);
     private final StudentRepository studentRepository;
     private final GroupRepository groupRepository;
     private final DepartmentRepository departmentRepository;
 
+    @Autowired
     public StudentServiceImpl(StudentRepository studentRepo, GroupRepository groupRepo, DepartmentRepository departmentRepo) {
         Objects.requireNonNull(studentRepo);
         Objects.requireNonNull(groupRepo);

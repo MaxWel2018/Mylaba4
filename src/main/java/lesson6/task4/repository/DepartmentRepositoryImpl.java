@@ -1,11 +1,12 @@
 package lesson6.task4.repository;
 
 import lesson6.task4.domain.Department;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
-
+@Component
 public class DepartmentRepositoryImpl implements DepartmentRepository {
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
     private static Map<String, List<Department>> byName = Collections.emptyMap();
