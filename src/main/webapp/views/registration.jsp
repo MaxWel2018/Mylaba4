@@ -17,15 +17,34 @@
 <html lang="${param.lang}">
 <head>
     <title>Title</title>
-    <link rel="stylesheet" href="/style.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="views/bootstrap-4.3.1-dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/views/css/stylyForRegestration.css">
     <meta charset="UTF-8">
 </head>
 <body>
-<a class="button_back button" href="${pageContext.servletContext.contextPath}/menu">
-    <fmt:message key="login.label.back"/>
-</a>
-<div class="form">
+<header class="flex  headerReg">
+    <div class="btn-back flex ">
+    <a class=" btn btn-primary " href="${pageContext.servletContext.contextPath}/menu">
+
+        <fmt:message key="login.label.back"/> </a>
+    </div>
+
+    <form action="" class="select-reg">
+        <select class="custom-select  select-size" id="language" name="language"
+                onchange="submit()">
+            <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
+            <option value="de" ${language == 'de' ? 'selected' : ''}>German</option>
+            <option value="fr" ${language == 'fr' ? 'selected' : ''}>France</option>
+        </select>
+    </form>
+</header>
+<div class="container">
+    <div class=" row form justify-content-center ">
     <form action="${pageContext.servletContext.contextPath}/register" method="POST">
         <label for="name"> <fmt:message key="registation.label.name"/> :</label>
         <input class="inputForm" pattern=${REGEX_FOR_NAME} type="text" id="name" name="name" placeholder=
@@ -58,14 +77,6 @@
         <label for="birthday"><fmt:message key="registation.label.birthday"/></label>
         <input class="inputForm" type="date" id="birthday" name="birthday" placeholder="birthday" min="1900-01-01"
                max="2019-09-25" autocomplete="off" required>
-        <label for="select">
-            <p><fmt:message key="registation.label.department"/></p>
-            <select name="department" id="select" required>
-                <c:forEach var="dep" items="${departments}">
-                    <option value=${dep.key}>${dep.value}</option>
-                </c:forEach>
-            </select>
-        </label>
         <p><fmt:message key="registation.label.group"/></p>
         <label>
             <select name="group">
@@ -74,20 +85,16 @@
                 </c:forEach>
             </select>
         </label>
-        <input class="button button_sub" type="submit" align="center" value=<fmt:message
+        <br>
+        <input class="btn btn-success btn-reg" type="submit" align="center" value=<fmt:message
                 key="registation.button.submit"/>>
     </form>
+    </div>
 </div>
-
-
-<form>
-    <select id="language" name="language" onchange="submit()">
-        <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
-        <option value="de" ${language == 'de' ? 'selected' : ''}>German</option>
-        <option value="fr" ${language == 'fr' ? 'selected' : ''}>France</option>
-    </select>
-</form>
-
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+</script>
+<script src="views/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
 </body>
+
 </html>

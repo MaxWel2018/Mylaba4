@@ -20,7 +20,7 @@ public class DepartmentRepositoryImpl implements DepartmentRepository {
 
 
 
-    public static Map<Long, Department> getIdToDepartment() {
+    public  Map<Long, Department> getIdToDepartment() {
         return idToDepartment;
     }
 

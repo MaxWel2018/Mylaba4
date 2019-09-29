@@ -26,7 +26,7 @@ public class GroupRepositoryImpl implements GroupRepository {
 
 
 
-    public static Map<Long, Group> getIdToGroup() {
+    public  Map<Long, Group> getIdToGroup() {
         return idToGroup;
     }
 

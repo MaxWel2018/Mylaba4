@@ -29,12 +29,12 @@ public class RegistrationStudent extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("departments", DepartmentRepositoryImpl.getIdToDepartment());
-        req.setAttribute("groups", GroupRepositoryImpl.getIdToGroup());
+        req.setAttribute("departments", departmentRepository.getIdToDepartment());
+        req.setAttribute("groups", groupRepository.getIdToGroup());
         req.setAttribute("REGEX_FOR_NAME",REGEX_FOR_NAME);
         req.setAttribute("REGEX_FOR_NUMBER",REGEX_FOR_NUMBER);
         req.setAttribute("REGEX_FOR_PHONE_NUMBER",REGEX_FOR_PHONE_NUMBER);
-        req.getRequestDispatcher("registration.jsp").forward(req, resp);
+        req.getRequestDispatcher("/views/registration.jsp").forward(req, resp);
     }
 
     @Override

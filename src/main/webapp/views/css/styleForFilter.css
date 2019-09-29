@@ -1,0 +1,40 @@
+@import "style.css";
+a.btn-primary {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    width: 9em;
+    font-size: 1.5em;
+    padding: 20px;
+}
+
+.btn-back {
+    width: 64%;
+    justify-content: space-around;
+
+}
+
+a.btn-primary {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    width: 4em;
+    font-size: 1em;
+    padding: 5px;
+}
+
+.select-size {
+    margin: 0;
+}
+.flex{
+}
+form.select-reg {
+    display: flex;
+    width: 36%;
+    justify-content: flex-end;
+
+}
+header.flex.headerReg {
+    margin-right: 66px;
+}
+.btn-reg{
+    width: 100%;
+}

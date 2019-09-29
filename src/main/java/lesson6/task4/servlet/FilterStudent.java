@@ -24,7 +24,7 @@ public class FilterStudent extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List students = studentService.filterByGroup("Group_G2");
         req.setAttribute("filterGroup", students);
-        req.getRequestDispatcher("filter.jsp").forward(req, resp);
+        req.getRequestDispatcher("/views/filter.jsp").forward(req, resp);
     }
 
 }
