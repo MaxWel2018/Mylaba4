@@ -2,11 +2,12 @@ package lesson6.task4.repository;
 
 import lesson6.task4.domain.Group;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
-@Component
+@Repository
 public class GroupRepositoryImpl implements GroupRepository {
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
     private static Map<Long, List<Group>> byDepartmentId = Collections.emptyMap();
@@ -24,16 +25,13 @@ public class GroupRepositoryImpl implements GroupRepository {
     }
 
 
-
-
-
+    @Override
     public  Map<Long, Group> getIdToGroup() {
         return idToGroup;
     }
 
     @Override
     public Group save(Group group) {
-        Objects.requireNonNull(group);
         Long id = group.getId();
         if (id == null) {
             id = SEQUENCE.getAndIncrement();
@@ -51,13 +49,11 @@ public class GroupRepositoryImpl implements GroupRepository {
 
     @Override
     public Optional<Group> findById(Long id) {
-        Objects.requireNonNull(id);
         return Optional.ofNullable(idToGroup.get(id));
     }
 
     @Override
     public List<Group> findByDepartmentId(Long id) {
-        Objects.requireNonNull(id);
         return byDepartmentId.getOrDefault(id, Collections.emptyList());
     }
 

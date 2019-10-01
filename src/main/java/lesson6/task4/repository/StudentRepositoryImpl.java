@@ -3,12 +3,13 @@ package lesson6.task4.repository;
 import lesson6.task4.domain.Department;
 import lesson6.task4.domain.Group;
 import lesson6.task4.domain.Student;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
-@Component
+
+@Repository
 public class StudentRepositoryImpl implements StudentRepository {
     private static final AtomicLong SEQUENCE = new AtomicLong(1);
     private static Map<String, List<Student>> byDepartmentName = Collections.emptyMap();
@@ -44,7 +45,6 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     @Override
     public List<Student> filterByGroup(String nameGroup) {
-        Objects.requireNonNull(nameGroup);
         return findByGroup(nameGroup);
 
     }
@@ -58,13 +58,11 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     @Override
     public List<Student> filterByDepartment(String nameDepartment) {
-        Objects.requireNonNull(nameDepartment);
         return findByDepartmentName(nameDepartment);
     }
 
     @Override
     public Student save(Student student) {
-        Objects.requireNonNull(student);
         Long id = student.getId();
         if (id == null) {
             id = SEQUENCE.getAndIncrement();
@@ -77,31 +75,26 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     @Override
     public Optional<Student> findById(Long id) {
-        Objects.requireNonNull(id);
         return Optional.ofNullable(idToStudents.get(id));
     }
 
     @Override
     public List<Student> findByDepartmentId(Long id) {
-        Objects.requireNonNull(id);
         return byDepartmentId.getOrDefault(id, Collections.emptyList());
     }
 
     @Override
     public List<Student> findByName(String name) {
-        Objects.requireNonNull(name);
         return byName.getOrDefault(name, Collections.emptyList());
     }
 
     @Override
     public List<Student> findByGroup(String name) {
-        Objects.requireNonNull(name);
         return byGroup.getOrDefault(name, Collections.emptyList());
     }
 
     @Override
     public List<Student> findByDepartmentName(String nameDepartment) {
-        Objects.requireNonNull(nameDepartment);
         return byDepartmentName.getOrDefault(nameDepartment, Collections.emptyList());
     }
 
@@ -119,7 +112,6 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     @Override
     public Student deleteById(Long id) {
-        Objects.requireNonNull(id);
         Student student = idToStudents.remove(id);
         updateIndices();
         return student;

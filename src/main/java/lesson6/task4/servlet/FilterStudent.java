@@ -12,9 +12,10 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/filter")
-public class FilterStudent extends HttpServlet {
+public class FilterStudent extends AbstractServlet {
     @Autowired
     private StudentServiceImpl studentService;
+
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List students = studentService.filterByGroup("Group_G2");
         req.setAttribute("filterGroup", students);

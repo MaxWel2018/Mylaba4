@@ -10,6 +10,7 @@ public class Address {
         this.apartmentNumber = apartmentNumber;
     }
 
+
     public String getNameStreet() {
         return nameStreet;
     }

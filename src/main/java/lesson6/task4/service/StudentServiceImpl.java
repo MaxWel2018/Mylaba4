@@ -8,19 +8,19 @@ import lesson6.task4.repository.GroupRepository;
 import lesson6.task4.repository.StudentRepository;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static lesson6.task4.utility.RegexTemplate.*;
-@Component
-public class StudentServiceImpl implements StudentService, FilterService, ValidateService {
+import static lesson6.task4.service.ValidateService.notNull;
+
+@Service
+public class StudentServiceImpl implements StudentService, FilterService{
     private static final Logger LOGGER = Logger.getLogger(StudentServiceImpl.class);
     private final StudentRepository studentRepository;
     private final GroupRepository groupRepository;
@@ -28,9 +28,7 @@ public class StudentServiceImpl implements StudentService, FilterService, Valida
 
     @Autowired
     public StudentServiceImpl(StudentRepository studentRepo, GroupRepository groupRepo, DepartmentRepository departmentRepo) {
-        Objects.requireNonNull(studentRepo);
-        Objects.requireNonNull(groupRepo);
-        Objects.requireNonNull(groupRepo);
+
         this.studentRepository = studentRepo;
         this.groupRepository = groupRepo;
         this.departmentRepository = departmentRepo;
@@ -43,17 +41,16 @@ public class StudentServiceImpl implements StudentService, FilterService, Valida
         Matcher m = p.matcher(testParam);
         return m.matches();
     }
-    //TODO глянуть регулярки и сделать валидацию
 
     @Override
     public List<Student> filterByGroup(String nameGroup) {
-        Objects.requireNonNull(nameGroup);
+        notNull(nameGroup);
         return studentRepository.filterByGroup(nameGroup);
     }
 
     @Override
     public List<Student> filterByDepartment(String nameDepartment) {
-        Objects.requireNonNull(nameDepartment);
+        notNull(nameDepartment);
         return studentRepository.filterByGroup(nameDepartment);
     }
 
@@ -64,19 +61,20 @@ public class StudentServiceImpl implements StudentService, FilterService, Valida
 
     @Override
     public Student register(Student student) {
-        Objects.requireNonNull(student);
+        notNull(student);
         return studentRepository.save(student);
     }
 
     @Override
     public void updateData(Student student) {
-        Objects.requireNonNull(student);
+        notNull(student);
         studentRepository.update(student);
 
     }
 
     @Override
     public Group findGroupById(Long id) {
+        notNull(id);
         if (groupRepository.findById(id).isPresent()) {
             return groupRepository.findById(id).get();
         } else {
@@ -105,44 +103,4 @@ public class StudentServiceImpl implements StudentService, FilterService, Valida
     }
 
 
-    @Override
-    public boolean userValidate(Map<String, String[]> map) {
-        try {
-            for (Map.Entry<String, String[]> o : map.entrySet()) {
-
-                if (o.getKey().equals("name") || o.getKey().equals("secondName") || o.getKey().equals("nameStreet")) {
-                    for (String s : o.getValue()) {
-                        if (!checkWithRegExp(s, REGEX_FOR_NAME)) {
-                            throw new IllegalArgumentException("Dont correct input");
-                        }
-                    }
-                }
-                if (o.getKey().equals("numberApartment")) {
-                    for (String s : o.getValue()) {
-                        if (!checkWithRegExp(s, REGEX_FOR_NUMBER)) {
-                            throw new IllegalArgumentException("Dont correct input");
-                        }
-                    }
-                }
-                if (o.getKey().equals("phone")) {
-                    for (String s : o.getValue()) {
-                        if (!checkWithRegExp(s, REGEX_FOR_PHONE_NUMBER)) {
-                            throw new IllegalArgumentException("Dont correct input");
-                        }
-                    }
-                }
-                if (o.getKey().equals("birthday")) {
-                    for (String s : o.getValue()) {
-                        if (!checkWithRegExp(s, REGEX_FOR_BIRTHDAY)) {
-                            throw new IllegalArgumentException("Dont correct input");
-                        }
-                    }
-                }
-            }
-        } catch (IllegalArgumentException e) {
-            LOGGER.error(e.getMessage());
-            throw e;  // TODO крашить програму или пусть работает ?
-        }
-        return true;
-    }
 }
